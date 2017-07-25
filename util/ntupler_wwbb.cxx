@@ -224,6 +224,7 @@ int main(int argc, char* argv[])
     bool p_mu24_imedium;
     bool p_mu24_iloose_L1MU15;
     bool p_mu26_imedium;
+    bool p_mu26_ivarmedium;
     bool p_mu40;
     bool p_mu50;
     bool p_mu60_0eta105_msonly;
@@ -251,6 +252,8 @@ int main(int argc, char* argv[])
     bool p_e26_lhtight_nod0_ivarloose;
     bool p_e60_lhmedium;
     bool p_e60_lhmedium_nod0;
+    bool p_e120_lhloose;
+    bool p_e140_lhloose_nod0;
     bool p_2e12_lhloose_L12EM10VH;
     bool p_2e15_lhloose_L12EM13VH;
     bool p_2e15_lhvloose_L12EM13VH;
@@ -289,6 +292,7 @@ int main(int argc, char* argv[])
         p_mu24_imedium = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu24_imedium");
         p_mu24_iloose_L1MU15 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu24_iloose_L1MU15");
         p_mu26_imedium = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu26_imedium"); 
+        p_mu26_ivarmedium = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu26_ivarmedium");
         p_mu40 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu40");
         p_mu50 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu50");
         p_mu60_0eta105_msonly = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu60_0eta105_msonly");
@@ -308,18 +312,18 @@ int main(int argc, char* argv[])
         p_e24_lhtight_nod0_iloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e24_lhtight_nod0_iloose");
         p_e24_lhmedium_nod0_iloose_L1EM20VH = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e24_lhmedium_nod0_iloose_L1EM20VH");
         p_e24_lhtight_ivarloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e24_lhtight_ivarloose");
-        //p_e24_lhtight_nod0_ivarloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e24_lhtight_nod0_ivarloose");
-        p_e24_lhtight_nod0_ivarloose = false;
+        p_e24_lhtight_nod0_ivarloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e24_lhtight_nod0_ivarloose");
 
         p_e26_lhmedium_L1EM22VHI = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e26_lhmedium_L1EM22VHI");
         p_e26_lhtight_iloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e26_lhtight_iloose");
         p_e26_lhtight_nod0_iloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e26_lhtight_nod0_iloose");
         p_e26_lhtight_ivarloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e26_lhtight_ivarloose");
-        //p_e26_lhtight_nod0_ivarloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e26_lhtight_nod0_ivarloose");
-        p_e26_lhtight_nod0_ivarloose = false;
+        p_e26_lhtight_nod0_ivarloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e26_lhtight_nod0_ivarloose");
     
         p_e60_lhmedium = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e60_lhmedium");
         p_e60_lhmedium_nod0 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e60_lhmedium_nod0");
+        p_e120_lhloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e120_lhloose");
+        p_e140_lhloose_nod0 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e140_lhloose_nod0");
         p_2e12_lhloose_L12EM10VH = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_2e12_lhloose_L12EM10VH");
         p_2e15_lhloose_L12EM13VH = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_2e15_lhloose_L12EM13VH");
         p_2e17_lhloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_2e17_lhloose");
@@ -481,6 +485,14 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("trig_mu26_imedium");
         *cutflow << [&](Superlink* sl, var_bool*) -> bool {
             return p_mu26_imedium;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("pass_HLT_mu26_ivarmedium"); {
+        *cutflow << HFTname("trig_mu26_ivarmedium");
+        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+            return p_mu26_ivarmedium;
         };
         *cutflow << SaveVar();
     }
@@ -724,6 +736,22 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("trig_e60_lhmedium_nod0");
         *cutflow << [&](Superlink* sl, var_bool*) -> bool {
             return p_e60_lhmedium_nod0;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("pass_e120_lhloose"); {
+        *cutflow << HFTname("trig_e120_lhloose");
+        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+            return p_e120_lhloose;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("pass_e140_lhloose_nod0"); {
+        *cutflow << HFTname("trig_e140_lhloose_nod0");
+        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+            return p_e140_lhloose_nod0;
         };
         *cutflow << SaveVar();
     }
