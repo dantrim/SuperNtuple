@@ -9,6 +9,7 @@
 #include "TChain.h"
 #include "TVectorD.h"
 #include "TRandom.h"
+#include "TF1.h"
 
 // SusyNtuple
 #include "SusyNtuple/ChainHelper.h"
@@ -26,7 +27,7 @@
 using namespace std;
 using namespace sflow;
 
-const string analysis_name = "ntupler_wwbb";
+const string analysis_name = "ntupler_val";
 
 int main(int argc, char* argv[])
 {
@@ -128,8 +129,8 @@ int main(int argc, char* argv[])
     ///////////////////////////////////////////////////
     // Analysis Cuts
     ///////////////////////////////////////////////////
-    *cutflow << CutName("exactly two signal leptons") << [](Superlink* sl) -> bool {
-        return sl->leptons->size() == 2;
+    *cutflow << CutName(">= 1 signal leptons") << [](Superlink* sl) -> bool {
+        return sl->leptons->size() >= 1;
     };
 
 //    #warning REMOVING LEPTON PT CUT
@@ -139,9 +140,9 @@ int main(int argc, char* argv[])
 //    };
     //*/
 
-    *cutflow << CutName("opposite sign") << [](Superlink* sl) -> bool {
-        return ((sl->leptons->at(0)->q * sl->leptons->at(1)->q) < 0);
-    };
+//    *cutflow << CutName("opposite sign") << [](Superlink* sl) -> bool {
+//        return ((sl->leptons->at(0)->q * sl->leptons->at(1)->q) < 0);
+//    };
 
     ///*
     *cutflow << CutName("mll > 20 GeV") << [](Superlink* sl) -> bool {
@@ -149,18 +150,18 @@ int main(int argc, char* argv[])
     };
     //*/
 
-    *cutflow << CutName("veto SF Z-window (within 10 GeV)") << [](Superlink* sl) -> bool {
-        bool pass = true;
-        bool isSF = false;
-        if((sl->leptons->size()==2 && (sl->electrons->size()==2 || sl->muons->size()==2))) isSF = true;
-        if(isSF) {
-            double mll = (*sl->leptons->at(0) + *sl->leptons->at(1)).M();
-            if( fabs(mll-91.2) < 20. ) pass = false;
-        }
-        return pass;
-    };
+//    *cutflow << CutName("veto SF Z-window (within 10 GeV)") << [](Superlink* sl) -> bool {
+//        bool pass = true;
+//        bool isSF = false;
+//        if((sl->leptons->size()==2 && (sl->electrons->size()==2 || sl->muons->size()==2))) isSF = true;
+//        if(isSF) {
+//            double mll = (*sl->leptons->at(0) + *sl->leptons->at(1)).M();
+//            if( fabs(mll-91.2) < 20. ) pass = false;
+//        }
+//        return pass;
+//    };
 
-    #warning REMOVED CUT ON B-JETS
+ //   #warning REMOVED CUT ON B-JETS
  //   *cutflow << CutName(">=1 b-tagged jets") << [](Superlink* sl) -> bool {
  //       int n_bjets = 0;
  //       for(auto j : (*sl->jets)) {
@@ -1162,12 +1163,27 @@ int main(int argc, char* argv[])
         };
         *cutflow << SaveVar();
     }
-    
+
+    *cutflow << NewVar("lumi block"); {
+        *cutflow << HFTname("lumi_block");
+        *cutflow << [](Superlink* sl, var_int*) -> int {
+            return sl->nt->evt()->lb;
+        };
+        *cutflow << SaveVar();
+    }
 
     *cutflow << NewVar("mcid"); {
         *cutflow << HFTname("mcid");
         *cutflow << [&](Superlink* sl, var_int*) -> int {
             return sl->nt->evt()->mcChannel;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("mc campaign (Susy::MCType)"); {
+        *cutflow << HFTname("mcType");
+        *cutflow << [](Superlink* sl, var_int*) -> int {
+            return sl->nt->evt()->mcType;
         };
         *cutflow << SaveVar();
     }
@@ -1252,6 +1268,99 @@ int main(int argc, char* argv[])
         *cutflow << SaveVar();
     } 
 
+    *cutflow << NewVar("actual interactions per b.c."); {
+        *cutflow << HFTname("actualMu");
+        *cutflow << [](Superlink* sl, var_float*) -> double { return sl->nt->evt()->actualMu; };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("actual interactions per b.c. with data scale factor applied"); {
+        *cutflow << HFTname("actualMuDataSF");
+        *cutflow << [](Superlink* sl, var_float*) -> double { return sl->nt->evt()->actualMuDataSF; };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("primary vertex X position"); {
+        *cutflow << HFTname("pvX");
+        *cutflow << [](Superlink* sl, var_float*) -> double { return sl->nt->evt()->pvX; };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("primary vertex Y position"); {
+        *cutflow << HFTname("pvY");
+        *cutflow << [](Superlink* sl, var_float*) -> double { return sl->nt->evt()->pvY; };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("primary vertex Z position"); {
+        *cutflow << HFTname("pvZ");
+        *cutflow << [](Superlink* sl, var_float*) -> double { return sl->nt->evt()->pvZ; };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("beam spot X position"); {
+        *cutflow << HFTname("beamSpotX");
+        *cutflow << [](Superlink* sl, var_float*) -> double { return sl->nt->evt()->beamPosX; };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("beam spot Y position"); {
+        *cutflow << HFTname("beamSpotY");
+        *cutflow << [](Superlink* sl, var_float*) -> double { return sl->nt->evt()->beamPosY; };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("beam spot Z position"); {
+        *cutflow << HFTname("beamSpotZ");
+        *cutflow << [](Superlink* sl, var_float*) -> double { return sl->nt->evt()->beamPosZ; };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("beam spot X position error"); {
+        *cutflow << HFTname("beamPosSigmaX");
+        *cutflow << [](Superlink* sl, var_float*) -> double { return sl->nt->evt()->beamPosSigmaX; };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("beam spot Y position error"); {
+        *cutflow << HFTname("beamPosSigmaY");
+        *cutflow << [](Superlink* sl, var_float*) -> double { return sl->nt->evt()->beamPosSigmaY; };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("beam spot Z position error"); {
+        *cutflow << HFTname("beamPosSigmaZ");
+        *cutflow << [&](Superlink* sl, var_float*) -> double { return sl->nt->evt()->beamPosSigmaZ; };
+        *cutflow << SaveVar();
+    }
+
+    TF1* pu_profile = new TF1("pu_profile", "gausn", -250, 250);
+
+    *cutflow << NewVar("pileup density"); {
+        *cutflow << HFTname("pileup_density");
+        *cutflow << [&](Superlink* sl, var_float*) -> double {
+            float actual_mu = sl->nt->evt()->actualMu;
+            float sigmaZ = sl->nt->evt()->beamPosSigmaZ;
+            float beamPosZ = sl->nt->evt()->beamPosZ;
+            float pvZ = sl->nt->evt()->pvZ;
+
+            pu_profile->SetParameter(0, actual_mu);
+            pu_profile->SetParameter(1, beamPosZ);
+            pu_profile->SetParameter(2, sigmaZ);
+
+            return pu_profile->Eval(pvZ);
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("number of tracks associated with primvary vertex"); {
+        *cutflow << HFTname("nTracksAtPV");
+        *cutflow << [](Superlink* sl, var_int*) -> int {
+            return sl->nt->evt()->nTracksAtPV;
+        };
+        *cutflow << SaveVar();
+    }
+
     // lepton variables
     // lepton variables
     // lepton variables
@@ -1281,6 +1390,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("is an EE event"); {
         *cutflow << HFTname("isEE");
         *cutflow << [&](Superlink* sl, var_int*) -> int  {
+            if(leptons.size()<2) return 0;
             if(leptons.at(0)->isEle() && leptons.at(1)->isEle()) { return 1; }
             else { return 0; }
         };
@@ -1289,6 +1399,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("is an MM event"); {
         *cutflow << HFTname("isMM");
         *cutflow << [&](Superlink* sl, var_int*) -> int {
+            if(leptons.size()<2) return 0;
             if(leptons.at(0)->isMu() && leptons.at(1)->isMu()) { return 1; }
             else { return 0; }
         };
@@ -1297,6 +1408,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("is an EM event"); {
         *cutflow << HFTname("isEM");
         *cutflow << [&](Superlink* sl, var_int*) -> int {
+            if(leptons.size()<2) return 0;
             if(leptons.at(0)->isEle() && leptons.at(1)->isMu()) { return 1; }
             else { return 0; }
         };
@@ -1305,6 +1417,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("is an ME event"); {
         *cutflow << HFTname("isME");
         *cutflow << [&](Superlink* sl, var_int*) -> int {
+            if(leptons.size()<2) return 0;
             if(leptons.at(0)->isMu() && leptons.at(1)->isEle()) { return 1; }
             else { return 0; }
         };
@@ -1313,6 +1426,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("is a SF event"); {
         *cutflow << HFTname("isSF");
         *cutflow << [&](Superlink* sl, var_int*) -> int {
+            if(leptons.size()<2) return 0;
             if( (leptons.at(0)->isEle() && leptons.at(1)->isEle()) ||
                 (leptons.at(0)->isMu() && leptons.at(1)->isMu()) ) { return 1; }
             else { return 0; }
@@ -1322,6 +1436,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("is a DF event"); {
         *cutflow << HFTname("isDF");
         *cutflow << [&](Superlink* sl, var_int*) -> int {
+            if(leptons.size()<2) return 0;
             if( (leptons.at(0)->isEle() && leptons.at(1)->isMu()) ||
                 (leptons.at(0)->isMu() && leptons.at(1)->isEle()) )  { return 1; }
             else { return 0; }
@@ -1331,6 +1446,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("lepton flavor [EE=0,MM=1,EM=2,ME=3]"); {
         *cutflow << HFTname("l_flav");
         *cutflow << [&](Superlink* sl, var_int*) -> int {
+            if(leptons.size()<2) return -1;
             bool e0 = leptons.at(0)->isEle();
             bool e1 = leptons.at(1)->isEle();
 
@@ -1342,6 +1458,32 @@ int main(int argc, char* argv[])
         };
         *cutflow << SaveVar();
     }
+
+    *cutflow << NewVar("lead lepton flavor [E=0, M=1]"); {
+        *cutflow << HFTname("l0_flav");
+        *cutflow << [&](Superlink* sl, var_int*) -> int {
+            bool e = leptons.at(0)->isEle();
+            bool m = leptons.at(0)->isMuo();
+
+            if(e && !m) return 0;
+            if(!e && m) return 1;
+            else { return -1; }
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("sub lead lepton flavor [E=0, M=1]"); {
+        *cutflow << HFTname("l1_flav");
+        *cutflow << [&](Superlink* sl, var_int*) -> int {
+            bool e = leptons.at(1)->isEle();
+            bool m = leptons.at(1)->isMuo();
+            if(e && !m) return 0;
+            if(!e && m) return 1;
+            else { return -1; }
+        };
+        *cutflow << SaveVar();
+    }
+
     *cutflow << NewVar("lead lepton q"); {
         *cutflow << HFTname("l0_q");
         *cutflow << [&](Superlink* sl, var_int*) -> int { return leptons.at(0)->q; };
@@ -1382,6 +1524,118 @@ int main(int argc, char* argv[])
         *cutflow << [&](Superlink* sl, var_float*) -> double { return leptons.at(1)->z0SinTheta(); };
         *cutflow << SaveVar();
     }
+
+    // electron stuff
+    *cutflow << NewVar("lead electron clusE"); {
+        *cutflow << HFTname("e0_clusE");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            if(leptons.at(0)->isEle()) {
+                return leptons.at(0)->clusE;
+            }
+            else { return -1; }
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("sublead electron clusE"); {
+        *cutflow << HFTname("e1_clusE");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            if(leptons.size()<2) return -1;
+            if(leptons.at(1)->isEle()) {
+                return leptons.at(1)->clusE;
+            }
+            else { return -1; }
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("lead electron clusEtaBE"); {
+        *cutflow << HFTname("e0_clusEtaBE");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            if(leptons.at(0)->isEle()) {
+                return leptons.at(0)->clusEtaBE;
+            }
+            else { return -5; }
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("sub-lead electron clusEtaBE"); {
+        *cutflow << HFTname("e1_clusEtaBE");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            if(leptons.size()<2) return -5;
+            if(leptons.at(1)->isEle()) {
+                return leptons.at(1)->clusEtaBE;
+            }
+            else { return -5; }
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("lead electron clusPhiBE"); {
+        *cutflow << HFTname("e0_clusPhiBE");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            if(leptons.at(0)->isEle()) {
+                return leptons.at(0)->clusPhiBE;
+            }
+            else { return -5; }
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("sub-lead electron clusPhiBE"); {
+        *cutflow << HFTname("e1_clusPhiBE");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            if(leptons.size()<2) return -5;
+            if(leptons.at(1)->isEle()) {
+                return leptons.at(1)->clusPhiBE;
+            }
+            else { return -5; }
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("lead electron track Pt"); {
+        *cutflow << HFTname("e0_trackPt");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            if(leptons.at(0)->isEle()) {
+                return leptons.at(0)->trackPt;
+            }
+            else { return -1; }
+        }
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("sub-lead electron track Pt"); {
+        *cutflow << HFTname("e1_trackPt");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            if(leptons.size()<2) return -1;
+            if(leptons.at(1)->isEle()) {
+                return leptons.at(1)->trackPt;
+            }
+            else { return -1; }
+        }
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("lead electron track Eta"); {
+        *cutflow << HFTname("e0_trackEta");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            if(leptons.at(0)->isEle()) {
+                return leptons.at(0)->trackEta;
+            }
+            else { return -5; }
+        }
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("sub-lead electron track Eta"); {
+        *cutflow << HFTname("e1_trackEta");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            if(leptons.size()<2) return -5;
+            if(leptons.at(1)->isEle()) {
+                return leptons.at(1)->trackEta;
+            }
+            else { return -5; }
+        }
+        *cutflow << SaveVar();
+    }
+
+
     *cutflow << NewVar("lead lepton pt"); {
         *cutflow << HFTname("l0_pt");
         *cutflow << [&](Superlink* sl, var_float*) -> double { return leptons.at(0)->Pt(); };
@@ -3630,6 +3884,8 @@ int main(int argc, char* argv[])
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////
+
+    delete pu_profile;
 
     // initialize the cutflow and start the event loop
     chain->Process(cutflow, options.input.c_str(), options.n_events_to_process);
