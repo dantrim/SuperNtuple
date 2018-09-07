@@ -13,7 +13,7 @@ PACKAGE              = SuperNtuple
 PACKAGE_PRELOAD      = Tree 
 
 # additional compilation flags to pass (not propagated to dependent packages):
-PACKAGE_CXXFLAGS     = -Wno-sign-compare -Wno-parentheses -O3 -ffast-math
+PACKAGE_CXXFLAGS     = -Wno-sign-compare -Wno-parentheses -O3 -ffast-math 
 
 # additional compilation flags to pass (propagated to dependent packages):
 PACKAGE_OBJFLAGS     = 
@@ -25,10 +25,10 @@ PACKAGE_LDFLAGS      =
 PACKAGE_BINFLAGS     = -lXMLParser -lEG 
 
 # additional linker flags to pass (propagated to client libraries):
-PACKAGE_LIBFLAGS     = -lm
+PACKAGE_LIBFLAGS     = -lm 
 
 # the list of packages we depend on:
-PACKAGE_DEP          = Superflow SusyNtuple 
+PACKAGE_DEP          = Superflow SusyNtuple Asg_Eigen Asg_Boost
 
 # the list of packages we use if present, but that we can work without :
 PACKAGE_TRYDEP       = 
