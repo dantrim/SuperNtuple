@@ -28,7 +28,7 @@
 
 // for TSelector analysis loopers processing susyNt you MUST inherit from SusyNtAna
 // in order to pick up the susyNt class objects
-class NNMaker : public TSelector
+class NNMaker
 {
 
     public :
@@ -44,33 +44,43 @@ class NNMaker : public TSelector
         void set_suffix(std::string val) { m_suffix = val; }
         std::string suffix() { return m_suffix; }
 
+        bool set_input_name(std::string input_filename);
+        std::string input_filename() { return m_input_name; }
+        std::string output_filename() { return m_output_name; }
+
+        void reset();
+
         // load the provided neural network (for now just do one)
         bool load_nn(std::string filename);
         void setup_nn_branches();
         float feature(std::string name);
         std::map<std::string, double> lwt_map();
+        lwt::LightweightGraph* graph() { return m_lwt_graph; }
 
         ////////////////////////////////////////////
         // analysis methods
         ////////////////////////////////////////////
+        bool process(long int n_to_process = -1); // main process loop
 
         ////////////////////////////////////////////
         // TSelector methods override
         ////////////////////////////////////////////
-        virtual void Init(TTree* tree);
-        virtual void Begin(TTree* tree); // Begin is called before looping on entries
-        virtual Bool_t Process(Long64_t entry); // Main event loop function called on each event
-        virtual void Terminate(); // Terminate is called after looping has finished
-        virtual Int_t Version() const { return 2; }
+        //virtual void Init(TTree* tree);
+        //virtual void Begin(TTree* tree); // Begin is called before looping on entries
+        //virtual Bool_t Process(Long64_t entry); // Main event loop function called on each event
+        //virtual void Terminate(); // Terminate is called after looping has finished
+        //virtual Int_t Version() const { return 2; }
 
 
     private :
         int m_dbg;
         std::string m_suffix;
+        std::string m_input_name;
         TChain* m_input_chain; // the TChain object we are processing
         std::string m_lwt_nn_jsonfile;
         lwt::LightweightGraph* m_lwt_graph;
 
+        std::string m_output_name;
         TFile* m_output_file;
         TTree* m_output_tree;
 
@@ -83,6 +93,10 @@ class NNMaker : public TSelector
         TBranch* b_d_tt;
         TBranch* b_d_wt;
         TBranch* b_d_z;
+
+        TBranch* b_lr_hh_tt;
+        TBranch* b_lr_hh_wt;
+        TBranch* b_lr_hh_z;
 
         TBranch* b_pr_hh_tt;
         TBranch* b_pr_hh_wt;
@@ -99,6 +113,10 @@ class NNMaker : public TSelector
         double m_d_tt;
         double m_d_wt;
         double m_d_z;
+
+        double m_lr_hh_tt;
+        double m_lr_hh_wt;
+        double m_lr_hh_z;
 
         double m_pr_hh_tt;
         double m_pr_hh_wt;

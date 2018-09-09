@@ -103,6 +103,7 @@ int main(int argc, char** argv)
     analysis->set_chain(chain); // propagate the TChain to the analysis
     analysis->set_suffix(suffix);
     analysis->load_nn(nn_file);
+    analysis->set_input_name(input);
     if(n_events < 0) n_events = n_entries_in_chain;
 
     cout << "---------------------------------------------------------" << endl;
@@ -111,7 +112,8 @@ int main(int argc, char** argv)
     cout << "---------------------------------------------------------" << endl;
     
     // call TChain Process to star the TSelector looper over the input TChain
-    if(n_events > 0) chain->Process(analysis, input.c_str(), n_events);
+    //if(n_events > 0) chain->Process(analysis, input.c_str(), n_events);
+    if(n_events > 0) analysis->process(n_events);
 
     cout << endl;
     cout << "makeNNTree    Analysis loop done" << endl;

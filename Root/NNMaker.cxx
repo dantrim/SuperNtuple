@@ -3,6 +3,7 @@
 // SusyNtuple
 #include "SusyNtuple/KinematicTools.h"
 #include "SusyNtuple/SusyDefs.h"
+#include "SusyNtuple/string_utils.h"
 using namespace Susy; // everything in SusyNtuple is in this namespace
 
 //ROOT
@@ -13,6 +14,7 @@ using namespace Susy; // everything in SusyNtuple is in this namespace
 #include <string>
 #include <sstream> // stringstream, ostringstream
 #include <fstream>
+#include <math.h>
 using namespace std;
 
 #define ADD_FEATURE_F( name ) \
@@ -30,8 +32,10 @@ using namespace std;
 NNMaker::NNMaker() :
     m_dbg(0),
     m_suffix(""),
+    m_input_name(""),
     m_input_chain(nullptr),
-    m_lwt_graph(nullptr)
+    m_lwt_graph(nullptr),
+    m_output_name("")
 {
     feature_map_f.clear();
     feature_map_i.clear();
@@ -54,25 +58,83 @@ bool NNMaker::load_nn(std::string filename)
     return true;
 }
 //////////////////////////////////////////////////////////////////////////////
+bool NNMaker::set_input_name(std::string input_name)
+{
+    // expect only ROOT files
+    if(!Susy::utils::endswith(input_name, ".root")) {
+        cout << "NNMaker::set_input_name    ERROR Input does not end with \".root\", expecing a single ROOT file as input" << endl;
+        return false;
+    }
+    m_input_name = input_name;
+
+
+    return true;
+}
+//////////////////////////////////////////////////////////////////////////////
+void NNMaker::reset()
+{
+    m_p_hh = -99;
+    m_p_tt = -99;
+    m_p_wt = -99;
+    m_p_z = -99;
+
+    m_d_hh = -99;
+    m_d_tt = -99;
+    m_d_wt = -99;
+    m_d_z = -99;
+
+    m_pr_hh_tt = -99;
+    m_pr_hh_wt = -99;
+    m_pr_hh_z = -99;
+    m_pr_hh_tt_wt = -99;
+    m_pr_hh_tt_wt_z = -99;
+}
+//////////////////////////////////////////////////////////////////////////////
 void NNMaker::setup_nn_branches()
 {
-    string output_name = "my_test";
-    if(suffix()!="") output_name += "_" + suffix();
-    output_name += ".root";
+    auto splits = Susy::utils::tokenizeString(input_filename(), '/'); 
+    //cout << "NNMaker::setup_nn_branches    Found " << splits.size() << " splits: ";
+    //for(auto & split : splits) {
+    //    cout << " " << split;
+    //}
+    //cout << endl;
 
-    m_output_file = new TFile(output_name.c_str(), "RECREATE");
-    m_output_tree = new TTree("superNt", "superNt");
+    std::string outname = splits.at(splits.size()-1);
+    splits = Susy::utils::tokenizeString(outname, '.');
+    outname = splits.at(0);
+    if(suffix() != "") outname += "_" + suffix();
+    outname += ".root";
+    m_output_name = outname;
+    cout << "NNMaker::setup_nn_branches    Output filename from input name : " << output_filename() << endl;
+
+    m_output_file = new TFile(output_filename().c_str(), "RECREATE");
+//    m_output_tree = new TTree("superNt", "superNt");
+    m_output_tree = chain()->CloneTree(0);
 
     cout << "NNMaker::setup_nn_branches    Copying branches of old (input) TTree" << endl;
     //chain()->SetBranchStatus("*", 1);
     m_output_tree->CopyEntries(0);
-    m_output_tree->CopyEntries(chain());
+    //m_output_tree->CopyEntries(chain());
     cout << "NNMaker::setup_nn_branches    Done copying..." << endl;
 
-    b_p_hh = m_output_tree->Branch("nn_p_hh", &m_p_hh);
-    b_p_tt = m_output_tree->Branch("nn_p_tt", &m_p_tt);
-    b_p_wt = m_output_tree->Branch("nn_p_wt", &m_p_wt);
-    b_p_z = m_output_tree->Branch("nn_p_z", &m_p_z);
+    b_p_hh = m_output_tree->Branch("bdef_nn_p_hh", &m_p_hh);
+    b_p_tt = m_output_tree->Branch("bdef_nn_p_tt", &m_p_tt);
+    b_p_wt = m_output_tree->Branch("bdef_nn_p_wt", &m_p_wt);
+    b_p_z = m_output_tree->Branch("bdef_nn_p_z", &m_p_z);
+
+    b_d_hh = m_output_tree->Branch("bdef_nn_d_hh", &m_d_hh);
+    b_d_tt = m_output_tree->Branch("bdef_nn_d_tt", &m_d_tt);
+    b_d_wt = m_output_tree->Branch("bdef_nn_d_wt", &m_d_wt);
+    b_d_z = m_output_tree->Branch("bdef_nn_d_z", &m_d_z);
+
+    b_lr_hh_tt = m_output_tree->Branch("bdef_nn_lr_hh_tt", &m_lr_hh_tt);
+    b_lr_hh_wt = m_output_tree->Branch("bdef_nn_lr_hh_wt", &m_lr_hh_wt);
+    b_lr_hh_z = m_output_tree->Branch("bdef_nn_lr_hh_z", &m_lr_hh_z);
+
+    b_pr_hh_tt = m_output_tree->Branch("bdef_nn_pr_hh_tt", &m_pr_hh_tt);
+    b_pr_hh_wt = m_output_tree->Branch("bdef_nn_pr_hh_wt", &m_pr_hh_wt);
+    b_pr_hh_z = m_output_tree->Branch("bdef_nn_pr_hh_z", &m_pr_hh_z);
+    b_pr_hh_tt_wt_z = m_output_tree->Branch("bdef_nn_pr_hh_tt_wt_z", &m_pr_hh_tt_wt_z);
 
 
     ADD_FEATURE_F(met)
@@ -108,19 +170,6 @@ void NNMaker::setup_nn_branches()
 
 }
 //////////////////////////////////////////////////////////////////////////////
-void NNMaker::Init(TTree* tree)
-{
-    cout << "NNMaker::Init" << endl;
-}
-//////////////////////////////////////////////////////////////////////////////
-void NNMaker::Begin(TTree* /*tree*/)
-{
-    // call base class' Begin method
-    if(dbg()) cout << "NNMaker::Begin" << endl;
-
-    return;
-}
-//////////////////////////////////////////////////////////////////////////////
 float NNMaker::feature(string fname)
 {
     if(feature_map_f.count(fname)) {
@@ -144,34 +193,91 @@ std::map<std::string, double> NNMaker::lwt_map()
     return m_lwt_map;
 }
 //////////////////////////////////////////////////////////////////////////////
-Bool_t NNMaker::Process(Long64_t entry)
+bool NNMaker::process(long int n_to_process)
 {
-    static Long64_t chain_entry = -1;
-    chain_entry++;
-    if(chain_entry == 0) {
-        setup_nn_branches();
-    }
-    chain()->GetEntry(chain_entry);
+    // before the event loop starts we should setup the connections and outputs
+    setup_nn_branches();
+    std::map< std::string, std::map< std::string, double >> lwt_inputs;
 
-    if(dbg() || chain_entry % 1000 == 0) {
-        cout << "NNMaker::Process    **** Processing entry " << setw(6) << chain_entry << " **** " << endl;
-    }
+    // start looping
+    long int  n_total = chain()->GetEntries();
+    if(n_to_process < 0) n_to_process = n_total;
+    for(long int entry = 0; entry < n_to_process; entry++) {
 
-    m_output_tree->Fill();
-    return kTRUE;
+        // clear out the observables we are writing new for each new event
+        reset();
+
+        chain()->GetEntry(entry);
+        if(dbg() || entry%1000==0) {
+            cout << "NNMaker::process     **** Processing entry " << setw(6) << entry << " ****" << endl;
+        }
+
+        lwt_inputs["InputLayer"] = lwt_map(); 
+        auto scores = graph()->compute(lwt_inputs);
+
+        m_p_hh = scores.at("out_0_hh");
+        m_p_tt = scores.at("out_1_tt");
+        m_p_wt = scores.at("out_2_wt");
+        m_p_z = scores.at("out_3_zjets");
+
+        m_d_hh = log( m_p_hh / (m_p_tt + m_p_wt + m_p_z) );
+        m_d_tt = log( m_p_tt / (m_p_hh + m_p_wt + m_p_z) );
+        m_d_wt = log( m_p_wt / (m_p_hh + m_p_tt + m_p_z) );
+        m_d_z = log( m_p_z / (m_p_hh + m_p_tt + m_p_wt) );
+
+        m_lr_hh_tt = log( m_p_hh / m_p_tt );
+        m_lr_hh_wt = log( m_p_hh / m_p_wt );
+        m_lr_hh_z = log( m_p_hh / m_p_z );
+
+        m_pr_hh_tt = m_p_hh / m_p_tt;
+        if(std::isnan(m_pr_hh_tt)) m_pr_hh_tt = -99;
+        m_pr_hh_wt = m_p_hh / m_p_wt;
+        if(std::isnan(m_pr_hh_wt)) m_pr_hh_wt = -99;
+        m_pr_hh_z = m_p_hh / m_p_z;
+        if(std::isnan(m_pr_hh_z)) m_pr_hh_z = -99;
+        m_pr_hh_tt_wt = m_p_hh / (m_p_tt + m_p_wt);
+        if(std::isnan(m_pr_hh_tt_wt)) m_pr_hh_tt_wt = -99;
+        m_pr_hh_tt_wt_z = m_p_hh / (m_p_tt + m_p_wt + m_p_z);
+        if(std::isnan(m_pr_hh_tt_wt_z)) m_pr_hh_tt_wt_z = -99;
+
+        // at the end of each event, push the output TTree
+        m_output_tree->Fill();
+    } // entry
+    
+    // all done
+    m_output_tree->Write();
+
+    return true;
 }
 //////////////////////////////////////////////////////////////////////////////
-void NNMaker::Terminate()
-{
-    if(m_lwt_graph) delete m_lwt_graph;
-
-    if(m_output_file) {
-     //   m_output_file->cd();
-        m_output_tree->Write();
-        m_output_file->Write();
-        //m_output_file->Close();
-    }
-
-    return;
-}
+//Bool_t NNMaker::Process(Long64_t entry)
+//{
+//    static Long64_t chain_entry = -1;
+//    chain_entry++;
+//    if(chain_entry == 0) {
+//        setup_nn_branches();
+//    }
+//    chain()->GetEntry(chain_entry);
+//
+//    if(dbg() || chain_entry % 1000 == 0) {
+//        cout << "NNMaker::Process    **** Processing entry " << setw(6) << chain_entry << " **** " << endl;
+//    }
+//
+//    m_output_tree->Fill();
+//    return kTRUE;
+//}
+//////////////////////////////////////////////////////////////////////////////
+//void NNMaker::Terminate()
+//{
+//    if(m_lwt_graph) delete m_lwt_graph;
+//
+//    if(m_output_file) {
+//     //   m_output_file->cd();
+//        m_output_tree->Write();
+//        m_output_file->Write();
+//        //m_output_file->Close();
+//    }
+//
+//    return;
+//}
 //////////////////////////////////////////////////////////////////////////////
