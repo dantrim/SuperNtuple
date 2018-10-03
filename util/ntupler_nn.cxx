@@ -25,10 +25,17 @@
 #include "Superflow/StringTools.h"
 #include "Superflow/input_options.h"
 
+// lwtnn
+#include "lwtnn/LightweightGraph.hh"
+#include "lwtnn/parse_json.hh"
+
 using namespace std;
 using namespace sflow;
 
-const string analysis_name = "ntupler_val";
+const string analysis_name = "ntupler_nn";
+
+const string nn_file = "./susynt-read/nn_descriptor.json";
+//const string nn_file = "/data/uclhc/uci/user/dantrim/lwtnn_test/my_model/nn_descriptor.json";
 
 int main(int argc, char* argv[])
 {
@@ -40,6 +47,12 @@ int main(int argc, char* argv[])
     if(!read_options(options)) {
         exit(1);
     }
+
+    // load the NN
+    std::ifstream input_nn_file(nn_file);
+    std::string output_layer_name = "OutputLayer";
+    auto config = lwt::parse_json_graph(input_nn_file);
+    lwt::LightweightGraph nn_graph(config, output_layer_name);
 
     TChain* chain = new TChain("susyNt");
     chain->SetDirectory(0);
@@ -3175,6 +3188,120 @@ int main(int argc, char* argv[])
         };
         *cutflow << SaveVar();
     }
+
+    // NN STUFF
+    // NN VARS
+    double nn_output_hh = -999;
+    double nn_output_tt = -999;
+    double nn_output_wt = -999;
+    double nn_output_zjets = -999;
+    std::map< std::string, std::map< std::string, double >> inputs;
+    std::map< std::string, double > nn_input;
+    
+    *cutflow << [&](Superlink* sl, var_void*) {
+        double nn_mbb = (bjets.size()>=2) ? (*bjets.at(0) + *bjets.at(1)).M() : -10.;
+
+        nn_input["met"] = met.lv().Pt();
+        nn_input["metPhi"] = met.lv().Phi();
+        nn_input["mll"] = (*leptons.at(0) + *leptons.at(1)).M();
+        nn_input["dRll"] = (leptons.at(0)->DeltaR(*leptons.at(1)));
+        nn_input["pTll"] =  (*leptons.at(0) + *leptons.at(1)).Pt();
+        nn_input["mbb"] = nn_mbb;
+        nn_input["dphi_ll"] = leptons.at(0)->DeltaPhi(*leptons.at(1));
+        nn_input["dphi_met_ll"] = met.lv().DeltaPhi( *leptons.at(0) + *leptons.at(1) ); 
+        nn_input["met_pTll"] = (met.lv() + *leptons.at(0) + *leptons.at(1)).Pt();
+        nn_input["nJets"] = jets.size();
+        nn_input["nSJets"] = sjets.size();
+        nn_input["nBJets"] = bjets.size();
+        nn_input["l0_pt"] = leptons.at(0)->Pt();
+        nn_input["l1_pt"] = leptons.at(1)->Pt();
+        nn_input["l0_eta"] = leptons.at(0)->Eta();
+        nn_input["l1_eta"] = leptons.at(1)->Eta();
+        nn_input["l0_phi"] = leptons.at(0)->Phi();
+        nn_input["l1_phi"] = leptons.at(1)->Phi();
+        nn_input["bj0_pt"] = (bjets.size() > 0) ? bjets.at(0)->Pt() : -10.;
+        nn_input["bj1_pt"] = (bjets.size() > 1) ? bjets.at(1)->Pt() : -10.;
+        nn_input["bj0_eta"] = (bjets.size() > 0) ? bjets.at(0)->Eta() : -10.;
+        nn_input["bj1_eta"] = (bjets.size() > 1) ? bjets.at(1)->Eta() : -10.; 
+        nn_input["bj0_phi"] = (bjets.size() > 0) ? bjets.at(0)->Phi() : -10.;
+        nn_input["bj1_phi"] = (bjets.size() > 1) ? bjets.at(1)->Phi() : -10.;
+        nn_input["dphi_bb"] = (bjets.size() > 1) ? (*bjets.at(0) + *bjets.at(1)).M() : -10.;
+        nn_input["dphi_bj0_ll"] = (bjets.size() > 0) ? (bjets.at(0)->DeltaPhi( *leptons.at(0) + *leptons.at(1) )) : -10.;
+        nn_input["dphi_bj0_l0"] = (bjets.size() > 0) ? (bjets.at(0)->DeltaPhi( *leptons.at(0) )) : -10.;
+        bool isEE = (leptons.at(0)->isEle() && leptons.at(1)->isEle());
+        bool isMM = (leptons.at(0)->isMu() && leptons.at(1)->isMu());
+        bool isSF = (isEE || isMM);
+        bool isDF = ((leptons.at(0)->isEle() && leptons.at(1)->isMu()) || (leptons.at(0)->isMu() && leptons.at(1)->isEle()));
+        nn_input["isEE"] = isEE ? 1 : 0;
+        nn_input["isMM"] = isMM ? 1 : 0;
+        nn_input["isSF"] = isSF ? 1 : 0;
+        nn_input["isDF"] = isDF ? 1 : 0;
+
+        inputs["InputLayer"] = nn_input;
+        auto output_scores = nn_graph.compute(inputs);
+        nn_output_hh = output_scores["out_0_hh"];
+        nn_output_tt = output_scores["out_1_tt"];
+        nn_output_wt = output_scores["out_2_wt"]; 
+        nn_output_zjets = output_scores["out_3_zjets"];
+    };
+
+    *cutflow << NewVar("nn_p_hh"); {
+        *cutflow << HFTname("nn_p_hh");
+        *cutflow << [&](Superlink* sl, var_float*) -> double {
+            return nn_output_hh;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("nn_p_tt"); {
+        *cutflow << HFTname("nn_p_tt");
+        *cutflow << [&](Superlink* sl, var_float*) -> double {
+            return nn_output_tt;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("nn_p_wt"); {
+        *cutflow << HFTname("nn_p_wt");
+        *cutflow << [&](Superlink* sl, var_float*) -> double {
+            return nn_output_wt;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("nn_p_zjets"); {
+        *cutflow << HFTname("nn_p_zjets");
+        *cutflow << [&](Superlink* sl, var_float*) -> double {
+            return nn_output_zjets;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("nn_d_hh"); {
+        *cutflow << HFTname("nn_d_hh");
+        *cutflow << [&](Superlink* sl, var_float*) -> double {
+            return log( nn_output_hh / (nn_output_tt + nn_output_wt + nn_output_zjets) );
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("nn_d_tt"); {
+        *cutflow << HFTname("nn_d_tt");
+        *cutflow << [&](Superlink* sl, var_float*) -> double {
+            return log( nn_output_tt / (nn_output_hh + nn_output_wt + nn_output_zjets) );
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("nn_d_wt"); {
+        *cutflow << HFTname("nn_d_wt");
+        *cutflow << [&](Superlink* sl, var_float*) -> double {
+            return log( nn_output_wt / (nn_output_hh + nn_output_tt + nn_output_zjets) );
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("nn_d_zjets"); {
+        *cutflow << HFTname("nn_d_zjets");
+        *cutflow << [&](Superlink* sl, var_float*) -> double {
+            return log( nn_output_zjets / (nn_output_hh + nn_output_tt + nn_output_wt) );
+        };
+        *cutflow << SaveVar();
+    }
+
 
     // clear the wectors
     *cutflow << [&](Superlink* /* sl */, var_void*) { leptons.clear(); };

@@ -19,13 +19,15 @@ atlas_depends_on_subdirs(
 
 # extra dependencies
 find_package( ROOT COMPONENTS Gpad Graf Graf3d Core Tree MathCore Hist RIO )
+find_package( AnalysisBaseExternals REQUIRED )
+find_package( lwtnn REQUIRED )
 
 # libraries
 atlas_add_library( SuperNtupleLib
     SuperNtuple/*.h Root/*.cxx
     PUBLIC_HEADERS SuperNtuple
-    PRIVATE_INCLUDE_DIRS ${ROOT_INCLUDE_DIRS}
-    LINK_LIBRARIES SuperflowLib SusyNtupleLib ${ROOT_LIBRARIES}
+    PRIVATE_INCLUDE_DIRS ${ROOT_INCLUDE_DIRS} ${LWTNN_INCLUDE_DIRS}
+    LINK_LIBRARIES SuperflowLib SusyNtupleLib ${ROOT_LIBRARIES} ${LWTNN_LIBRARIES}
 )
 
 # executables
@@ -36,8 +38,8 @@ function(SuperNtupleExec filename)
     set(execname)
     get_filename_component(execname ${filename} NAME_WE)
     atlas_add_executable( ${execname} "util/${execname}.cxx"
-        INCLUDE_DIRS ${ROOT_INCLUDE_DIRS}
-        LINK_LIBRARIES ${ROOT_LIBRARIES} SuperNtupleLib ${extra_libs}
+        INCLUDE_DIRS ${ROOT_INCLUDE_DIRS} ${LWTNN_INCLUDE_DIRS}
+        LINK_LIBRARIES ${ROOT_LIBRARIES} ${LWTNN_LIBRARIES} SuperNtupleLib ${extra_libs}
     )
 endfunction(SuperNtupleExec)
 
