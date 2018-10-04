@@ -2202,10 +2202,9 @@ int main(int argc, char* argv[])
 
         // if the jet passes the normal b-tagging selection then add it
         // and if not, add it to the be indexed by Mv2
-        for(int i = 0; i < jets.size(); i++) {
+        for(int i = 0; i < (int)jets.size(); i++) {
             Jet* j = jets.at(i);
             if(sl->tools->jetSelector().isBJet(j)) bmjets.push_back(j);
-            //if(sl->tools->jetSelector().isBMod(j, 77)) bmjets.push_back(j);
             else {
                 mv2_scores_by_idx.push_back( std::pair<int, float>(i, j->mv2c10) );
             }
