@@ -2085,7 +2085,7 @@ int main(int argc, char* argv[])
 
     *cutflow << [&](Superlink* sl, var_void*) { jets = *sl->jets; };
     *cutflow << [&](Superlink* sl, var_void*) {
-        for(int i = 0; i < jets.size(); i++) {
+        for(int i = 0; i < (int)jets.size(); i++) {
             Jet* j = jets[i];
             if(sl->tools->jetSelector().isBJet(j))  bjets.push_back(j);
             else { sjets.push_back(j); }

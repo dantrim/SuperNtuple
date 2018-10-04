@@ -1027,7 +1027,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("l_q");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < leptons.size(); i++) {
+            for(int i = 0; i < (int)leptons.size(); i++) {
                 out.push_back(leptons.at(i)->q);
             }
             return out;
@@ -1038,7 +1038,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("l_d0");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < leptons.size(); i++) {
+            for(int i = 0; i < (int)leptons.size(); i++) {
                 out.push_back(leptons.at(i)->d0);
             }
             return out;
@@ -1049,7 +1049,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("l_d0sig");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < leptons.size(); i++) {
+            for(int i = 0; i < (int)leptons.size(); i++) {
                 out.push_back(leptons.at(i)->d0sigBSCorr);
             }
             return out;
@@ -1060,7 +1060,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("l_z0sinTheta");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < leptons.size(); i++) {
+            for(int i = 0; i < (int)leptons.size(); i++) {
                 out.push_back(leptons.at(i)->z0SinTheta());
             }
             return out;
@@ -1071,7 +1071,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("l_pt");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < leptons.size(); i++) {
+            for(int i = 0; i < (int)leptons.size(); i++) {
                 out.push_back(leptons.at(i)->Pt());
             }
             return out;
@@ -1082,7 +1082,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("l_topoetcone20");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < leptons.size(); i++) {
+            for(int i = 0; i < (int)leptons.size(); i++) {
                 out.push_back(leptons.at(i)->topoetcone20);
             }
             return out;
@@ -1093,7 +1093,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("l_topoetcone30");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < leptons.size(); i++) {
+            for(int i = 0; i < (int)leptons.size(); i++) {
                 out.push_back(leptons.at(i)->topoetcone30);
             }
             return out;
@@ -1104,7 +1104,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("l_ptcone20");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < leptons.size(); i++) {
+            for(int i = 0; i < (int)leptons.size(); i++) {
                 out.push_back(leptons.at(i)->ptcone20);
             }
             return out;
@@ -1115,7 +1115,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("l_ptcone30");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < leptons.size(); i++) {
+            for(int i = 0; i < (int)leptons.size(); i++) {
                 out.push_back(leptons.at(i)->ptcone30);
             }
             return out;
@@ -1126,7 +1126,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("l_ptvarcone20");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < leptons.size(); i++) {
+            for(int i = 0; i < (int)leptons.size(); i++) {
                 out.push_back(leptons.at(i)->ptvarcone20);
             }
             return out;
@@ -1137,7 +1137,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("l_ptvarcone30");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < leptons.size(); i++) {
+            for(int i = 0; i < (int)leptons.size(); i++) {
                 out.push_back(leptons.at(i)->ptvarcone30);
             }
             return out;
@@ -1149,7 +1149,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("l_eta");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < leptons.size(); i++) {
+            for(int i = 0; i < (int)leptons.size(); i++) {
                 out.push_back(leptons.at(i)->Eta());
             }
             return out;
@@ -1160,7 +1160,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("l_phi");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < leptons.size(); i++) {
+            for(int i = 0; i < (int)leptons.size(); i++) {
                 out.push_back(leptons.at(i)->Phi());
             }
             return out;
@@ -1240,7 +1240,7 @@ int main(int argc, char* argv[])
 
     *cutflow << [&](Superlink* sl, var_void*) { jets = *sl->jets; };
     *cutflow << [&](Superlink* sl, var_void*) {
-        for(int i = 0; i < jets.size(); i++) {
+        for(int i = 0; i < (int)jets.size(); i++) {
             Jet* j = jets[i];
             if(sl->tools->jetSelector().isB(j))  bjets.push_back(j);
             if(!sl->tools->jetSelector().isB(j)) sjets.push_back(j);
@@ -1355,7 +1355,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("j_pt");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < jets.size(); i++) {
+            for(int i = 0; i < (int)jets.size(); i++) {
                 out.push_back(jets.at(i)->Pt());
             }
             return out;
@@ -1366,7 +1366,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("sj_pt");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < sjets.size(); i++) {
+            for(int i = 0; i < (int)sjets.size(); i++) {
                 out.push_back(sjets.at(i)->Pt());
             }
             return out;
@@ -1377,7 +1377,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("bj_pt");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < bjets.size(); i++) {
+            for(int i = 0; i < (int)bjets.size(); i++) {
                 out.push_back(bjets.at(i)->Pt());
             }
             return out;
@@ -1388,7 +1388,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("bj_pt30");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < bjets30.size(); i++) {
+            for(int i = 0; i < (int)bjets30.size(); i++) {
                 out.push_back(bjets30.at(i)->Pt());
             }
             return out;
@@ -1399,7 +1399,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("bj_pt40");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < bjets40.size(); i++) {
+            for(int i = 0; i < (int)bjets40.size(); i++) {
                 out.push_back(bjets40.at(i)->Pt());
             }
             return out;
@@ -1410,7 +1410,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("bj_pt50");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < bjets50.size(); i++) {
+            for(int i = 0; i < (int)bjets50.size(); i++) {
                 out.push_back(bjets50.at(i)->Pt());
             }
             return out;
@@ -1421,7 +1421,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("bj_pt60");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < bjets60.size(); i++) {
+            for(int i = 0; i < (int)bjets60.size(); i++) {
                 out.push_back(bjets60.at(i)->Pt());
             }
             return out;
@@ -1434,7 +1434,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("j_eta");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < jets.size(); i++) {
+            for(int i = 0; i < (int)jets.size(); i++) {
                 out.push_back(jets.at(i)->Eta());
             }
             return out;
@@ -1445,7 +1445,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("sj_eta");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < sjets.size(); i++) {
+            for(int i = 0; i < (int)sjets.size(); i++) {
                 out.push_back(sjets.at(i)->Eta());
             }
             return out;
@@ -1456,7 +1456,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("bj_eta");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < bjets.size(); i++) {
+            for(int i = 0; i < (int)bjets.size(); i++) {
                 out.push_back(bjets.at(i)->Eta());
             }
             return out;
@@ -1468,7 +1468,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("j_phi");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < jets.size(); i++) {
+            for(int i = 0; i < (int)jets.size(); i++) {
                 out.push_back(jets.at(i)->Phi());
             }
             return out;
@@ -1479,7 +1479,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("sj_phi");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < sjets.size(); i++) {
+            for(int i = 0; i < (int)sjets.size(); i++) {
                 out.push_back(sjets.at(i)->Phi());
             }
             return out;
@@ -1490,7 +1490,7 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("bj_phi");
         *cutflow << [&](Superlink* /*sl*/, var_float_array*) -> vector<double> {
             vector<double> out;
-            for(int i = 0; i < bjets.size(); i++) {
+            for(int i = 0; i < (int)bjets.size(); i++) {
                 out.push_back(bjets.at(i)->Phi());
             }
             return out;
