@@ -34,8 +34,8 @@ using namespace sflow;
 
 const string analysis_name = "ntupler_nn";
 
-string network_dir = "/data/uclhc/uci/user/dantrim/n0303val/susynt-read/data/";
-//string network_dir = "./susynt-read/data/";
+//string network_dir = "/data/uclhc/uci/user/dantrim/n0303val/susynt-read/data/";
+string network_dir = "./susynt-read/data/";
 string nn_file = network_dir + "nn_descriptor_nombbmt2_1k.json";
 
 int main(int argc, char* argv[])
