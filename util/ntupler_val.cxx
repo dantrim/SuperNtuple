@@ -1204,10 +1204,38 @@ int main(int argc, char* argv[])
         };
         *cutflow << SaveVar();
     }
+
+    *cutflow << NewVar("event weight without pileup weight"); {
+        *cutflow << HFTname("eventweightNoPRW");
+        *cutflow << [&](Superlink* sl, var_double*) -> double {
+            return sl->weights->product();
+        };
+        *cutflow << SaveVar();
+    }
+
     *cutflow << NewVar("event weight x btag SF"); {
         *cutflow << HFTname("eventweightbtag");
         *cutflow << [&](Superlink* sl, var_double*) -> double {
-            return sl->weights->product() * sl->weights->btagSf;
+            return sl->weights->product() * sl->nt->evt()->wPileup * sl->weights->btagSf;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("event weight x btag SF NoPRW"); {
+        *cutflow << HFTname("eventweightbtagNoPRW");
+        *cutflow << [&](Superlink* sl, var_double*) -> double {
+    *cutflow << NewVar("event weight x btag SF x jvtSf"); {
+        *cutflow << HFTname("eventweightBtagJvt");
+        *cutflow << [&](Superlink* sl, var_double*) -> double {
+            return sl->weights->product() * sl->nt->evt()->wPileup * sl->weights->btagSf * sl->weights->jvtSf;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("event weight x btag SF x jvtSf NoPRW"); {
+        *cutflow << HFTname("eventweightBtagJvtNoPRW");
+        *cutflow << [&](Superlink* sl, var_double*) -> double {
+            return sl->weights->product() * sl->weights->btagSf * sl->weights->jvtSf;
         };
         *cutflow << SaveVar();
     }
@@ -1216,6 +1244,62 @@ int main(int argc, char* argv[])
         *cutflow << HFTname("pupw");
         *cutflow << [](Superlink* sl, var_double*) -> double {
             return sl->nt->evt()->wPileup;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("event weight (multi period)"); {
+        *cutflow << HFTname("eventweight_multi");
+        *cutflow << [&](Superlink* sl, var_double*) -> double {
+            return sl->weights->product_multi() * sl->nt->evt()->wPileup;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("event weight without pileup weight"); {
+        *cutflow << HFTname("eventweightNoPRW_multi");
+        *cutflow << [&](Superlink* sl, var_double*) -> double {
+            return sl->weights->product_multi();
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("event weight x btag SF"); {
+        *cutflow << HFTname("eventweightbtag_multi");
+        *cutflow << [&](Superlink* sl, var_double*) -> double {
+            return sl->weights->product_multi() * sl->nt->evt()->wPileup * sl->weights->btagSf;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("event weight x btag SF NoPRW"); {
+        *cutflow << HFTname("eventweightbtagNoPRW_multi");
+        *cutflow << [&](Superlink* sl, var_double*) -> double {
+            return sl->weights->product_multi() * sl->weights->btagSf;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("event weight x btag SF x jvtSf"); {
+        *cutflow << HFTname("eventweightBtagJvt_multi");
+        *cutflow << [&](Superlink* sl, var_double*) -> double {
+            return sl->weights->product_multi() * sl->nt->evt()->wPileup * sl->weights->btagSf * sl->weights->jvtSf;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("event weight x btag SF x jvtSf NoPRW"); {
+        *cutflow << HFTname("eventweightBtagJvtNoPRW_multi");
+        *cutflow << [&](Superlink* sl, var_double*) -> double {
+            return sl->weights->product_multi() * sl->weights->btagSf * sl->weights->jvtSf;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("pile-up weight with period weight divided out"); {
+        *cutflow << HFTname("pupwNoPeriod");
+        *cutflow << [](Superlink* sl, var_double*) -> double {
+            return (sl->nt->evt()->wPileup / sl->nt->evt()->wPileup_period);
         };
         *cutflow << SaveVar();
     }

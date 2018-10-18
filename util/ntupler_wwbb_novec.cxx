@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
     ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////
 
-    *cutflow << CutName("read in ") << [](Superlink* sl) -> bool { return true; };
+    *cutflow << CutName("read in ") << [](Superlink* /* sl */) -> bool { return true; };
 
     ////////////////////////////////////////////////////
     // Cleaning cuts
@@ -228,8 +228,8 @@ int main(int argc, char* argv[])
     // for eff
     bool p_mu20;
     bool p_mu20_iloose_L1MU15;
-    bool p_mu22;
-    bool p_mu24;
+//    bool p_mu22;
+//    bool p_mu24;
     bool p_mu24_iloose;
     bool p_mu24_imedium;
     bool p_mu24_iloose_L1MU15;
@@ -242,11 +242,11 @@ int main(int argc, char* argv[])
     bool p_mu20_mu8noL1;
     bool p_mu22_mu8noL1;
     bool p_mu24_mu8noL1;
-    bool p_e12_lhloose;
-    bool p_e12_lhloose_L1EM10VH;
-    bool p_e15_lhloose_L1EM13VH;
-    bool p_e17_lhloose;
-    bool p_e17_lhmedium;
+//    bool p_e12_lhloose;
+//    bool p_e12_lhloose_L1EM10VH;
+//    bool p_e15_lhloose_L1EM13VH;
+//    bool p_e17_lhloose;
+//    bool p_e17_lhmedium;
     bool p_e24_lhmedium_iloose_L1EM18VH;
     bool p_e24_lhmedium_iloose_L1EM20VH;
     bool p_e24_lhmedium_L1EM20VHI;
@@ -296,8 +296,8 @@ int main(int argc, char* argv[])
         // eff
         p_mu20 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu20");
         p_mu20_iloose_L1MU15 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu20_iloose_L1MU15");
-        p_mu22 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu22");
-        p_mu24 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu24");
+        //p_mu22 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu22");
+        //p_mu24 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu24");
         p_mu24_iloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu24_iloose");
         p_mu24_imedium = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu24_imedium");
         p_mu24_iloose_L1MU15 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu24_iloose_L1MU15");
@@ -310,11 +310,11 @@ int main(int argc, char* argv[])
         p_mu20_mu8noL1 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu20_mu8noL1");
         p_mu22_mu8noL1 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu22_mu8noL1");
         p_mu24_mu8noL1 = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_mu24_mu8noL1");
-        p_e12_lhloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e12_lhloose");
-        p_e12_lhloose_L1EM10VH = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e12_lhloose_L1EM10VH");
-        p_e15_lhloose_L1EM13VH = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e15_lhloose_L1EM13VH");
-        p_e17_lhloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e17_lhloose");
-        p_e17_lhmedium = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e17_lhmedium");
+        //p_e12_lhloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e12_lhloose");
+        //p_e12_lhloose_L1EM10VH = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e12_lhloose_L1EM10VH");
+        //p_e15_lhloose_L1EM13VH = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e15_lhloose_L1EM13VH");
+        //p_e17_lhloose = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e17_lhloose");
+        //p_e17_lhmedium = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e17_lhmedium");
         p_e24_lhmedium_iloose_L1EM18VH = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e24_lhmedium_iloose_L1EM18VH");
         p_e24_lhmedium_iloose_L1EM20VH = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e24_lhmedium_iloose_L1EM20VH");
         p_e24_lhmedium_L1EM20VHI = sl->tools->triggerTool().passTrigger(sl->nt->evt()->trigBits, "HLT_e24_lhmedium_L1EM20VHI");
@@ -350,77 +350,77 @@ int main(int argc, char* argv[])
     };
     *cutflow << NewVar("pass mu18_mu8noL1"); {
         *cutflow << HFTname("trig_mu18_mu8noL1");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return pass_mu18_mu8noL1;
         };
         *cutflow << SaveVar();
     }
     *cutflow << NewVar("pass mu20_mu8noL1"); {
         *cutflow << HFTname("trig_mu20_mu8noL1");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return pass_mu20_mu8noL1;
         };
         *cutflow << SaveVar();
     }
     *cutflow << NewVar("pass e17_lhloose_mu14"); {
         *cutflow << HFTname("trig_e17_lhloose_mu14");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return pass_e17_lhloose_mu14;
         };
         *cutflow << SaveVar();
     }
     *cutflow << NewVar("pass 2e12_lhloose_L12EM10VH"); {
         *cutflow << HFTname("trig_2e12_lhloose_L12EM10VH");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return pass_2e12_lhloose_L12EM10VH;
         };
         *cutflow << SaveVar();
     }
     *cutflow << NewVar("pass 2e15_lhvloose_L12EM13VH"); {
         *cutflow << HFTname("trig_2e15_lhvloose_L12EM13VH");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return pass_2e15_lhvloose_L12EM13VH;
         };
         *cutflow << SaveVar();
     }
     *cutflow << NewVar("pass OR 2015 trigger set"); {
         *cutflow << HFTname("trig_pass2015");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return (pass_mu18_mu8noL1 || pass_e17_lhloose_mu14 || pass_2e12_lhloose_L12EM10VH);
         };
         *cutflow << SaveVar();
     }
     *cutflow << NewVar("pass OR 2016 trigger set"); {
         *cutflow << HFTname("trig_pass2016");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return (pass_mu20_mu8noL1 || pass_e17_lhloose_mu14 || pass_2e15_lhvloose_L12EM13VH);
         };
         *cutflow << SaveVar();
     }
     *cutflow << NewVar("pass HLT_2e17_lhvloose_nod0"); {
         *cutflow << HFTname("trig_2e17_lhvloose_nod0");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return pass_2e17_lhvloose_nod0;
         };
         *cutflow << SaveVar();
     } 
     *cutflow << NewVar("pass mu22_mu8noL1"); {
         *cutflow << HFTname("trig_mu22_mu8noL1");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return pass_mu22_mu8noL1;
         };
         *cutflow << SaveVar();
     } 
     *cutflow << NewVar("pass HLT_e17_lhloose_nod0_mu14"); {
         *cutflow << HFTname("trig_e17_lhloose_nod0_mu14");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return pass_e17_lhloose_nod0_mu14;
         };
         *cutflow << SaveVar();
     } 
     *cutflow << NewVar("pass OR UPDATED trigger set"); {
         *cutflow << HFTname("trig_pass2016update");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return (pass_2e17_lhvloose_nod0 || pass_mu22_mu8noL1 || pass_e17_lhloose_nod0_mu14); 
         };
         *cutflow << SaveVar();
@@ -430,7 +430,7 @@ int main(int argc, char* argv[])
     // eff trig cuts
     *cutflow << NewVar("pass_mu20"); {
         *cutflow << HFTname("trig_mu20");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu20;
         };
         *cutflow << SaveVar();
@@ -439,34 +439,34 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_mu20_iloose_L1MU15"); {
         *cutflow << HFTname("trig_mu20_iloose_L1MU15");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu20_iloose_L1MU15;
         };
         *cutflow << SaveVar();
     }
 
 
-    *cutflow << NewVar("pass_mu22"); {
-        *cutflow << HFTname("trig_mu22");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
-            return p_mu22;
-        };
-        *cutflow << SaveVar();
-    }
+//    *cutflow << NewVar("pass_mu22"); {
+//        *cutflow << HFTname("trig_mu22");
+//        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+//            return p_mu22;
+//        };
+//        *cutflow << SaveVar();
+//    }
 
 
-    *cutflow << NewVar("pass_mu24"); {
-        *cutflow << HFTname("trig_mu24");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
-            return p_mu24;
-        };
-        *cutflow << SaveVar();
-    }
+//    *cutflow << NewVar("pass_mu24"); {
+//        *cutflow << HFTname("trig_mu24");
+//        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+//            return p_mu24;
+//        };
+//        *cutflow << SaveVar();
+//    }
 
 
     *cutflow << NewVar("pass_mu24_iloose"); {
         *cutflow << HFTname("trig_mu24_iloose");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu24_iloose;
         };
         *cutflow << SaveVar();
@@ -475,7 +475,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_mu24_imedium"); {
         *cutflow << HFTname("trig_mu24_imedium");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu24_imedium;
         };
         *cutflow << SaveVar();
@@ -484,7 +484,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_mu24_iloose_L1MU15"); {
         *cutflow << HFTname("trig_mu24_iloose_L1MU15");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu24_iloose_L1MU15;
         };
         *cutflow << SaveVar();
@@ -493,7 +493,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_mu26_imedium"); {
         *cutflow << HFTname("trig_mu26_imedium");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu26_imedium;
         };
         *cutflow << SaveVar();
@@ -501,7 +501,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_HLT_mu26_ivarmedium"); {
         *cutflow << HFTname("trig_mu26_ivarmedium");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu26_ivarmedium;
         };
         *cutflow << SaveVar();
@@ -510,7 +510,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_mu40"); {
         *cutflow << HFTname("trig_mu40");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu40;
         };
         *cutflow << SaveVar();
@@ -519,7 +519,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_mu50"); {
         *cutflow << HFTname("trig_mu50");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu50;
         };
         *cutflow << SaveVar();
@@ -528,7 +528,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_mu60_0eta105_msonly"); {
         *cutflow << HFTname("trig_mu60_0eta105_msonly");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu60_0eta105_msonly;
         };
         *cutflow << SaveVar();
@@ -537,7 +537,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_mu18_mu8noL1"); {
         *cutflow << HFTname("trig_mu18_mu8noL1");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu18_mu8noL1;
         };
         *cutflow << SaveVar();
@@ -546,7 +546,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_mu20_mu8noL1"); {
         *cutflow << HFTname("trig_mu20_mu8noL1");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu20_mu8noL1;
         };
         *cutflow << SaveVar();
@@ -555,7 +555,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_mu22_mu8noL1"); {
         *cutflow << HFTname("trig_mu22_mu8noL1");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu22_mu8noL1;
         };
         *cutflow << SaveVar();
@@ -564,61 +564,61 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_mu24_mu8noL1"); {
         *cutflow << HFTname("trig_mu24_mu8noL1");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_mu24_mu8noL1;
         };
         *cutflow << SaveVar();
     }
 
 
-    *cutflow << NewVar("pass_e12_lhloose"); {
-        *cutflow << HFTname("trig_e12_lhloose");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
-            return p_e12_lhloose;
-        };
-        *cutflow << SaveVar();
-    }
+//    *cutflow << NewVar("pass_e12_lhloose"); {
+//        *cutflow << HFTname("trig_e12_lhloose");
+//        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+//            return p_e12_lhloose;
+//        };
+//        *cutflow << SaveVar();
+//    }
 
 
-    *cutflow << NewVar("pass_e12_lhloose_L1EM10VH"); {
-        *cutflow << HFTname("trig_e12_lhloose_L1EM10VH");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
-            return p_e12_lhloose_L1EM10VH;
-        };
-        *cutflow << SaveVar();
-    }
+//    *cutflow << NewVar("pass_e12_lhloose_L1EM10VH"); {
+//        *cutflow << HFTname("trig_e12_lhloose_L1EM10VH");
+//        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+//            return p_e12_lhloose_L1EM10VH;
+//        };
+//        *cutflow << SaveVar();
+//    }
 
 
-    *cutflow << NewVar("pass_e15_lhloose_L1EM13VH"); {
-        *cutflow << HFTname("trig_e15_lhloose_L1EM13VH");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
-            return p_e15_lhloose_L1EM13VH;
-        };
-        *cutflow << SaveVar();
-    }
+//    *cutflow << NewVar("pass_e15_lhloose_L1EM13VH"); {
+//        *cutflow << HFTname("trig_e15_lhloose_L1EM13VH");
+//        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+//            return p_e15_lhloose_L1EM13VH;
+//        };
+//        *cutflow << SaveVar();
+//    }
 
 
-    *cutflow << NewVar("pass_e17_lhloose"); {
-        *cutflow << HFTname("trig_e17_lhloose");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
-            return p_e17_lhloose;
-        };
-        *cutflow << SaveVar();
-    }
+//    *cutflow << NewVar("pass_e17_lhloose"); {
+//        *cutflow << HFTname("trig_e17_lhloose");
+//        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+//            return p_e17_lhloose;
+//        };
+//        *cutflow << SaveVar();
+//    }
 
 
-    *cutflow << NewVar("pass_e17_lhmedium"); {
-        *cutflow << HFTname("trig_e17_lhmedium");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
-            return p_e17_lhmedium;
-        };
-        *cutflow << SaveVar();
-    }
+//    *cutflow << NewVar("pass_e17_lhmedium"); {
+//        *cutflow << HFTname("trig_e17_lhmedium");
+//        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+//            return p_e17_lhmedium;
+//        };
+//        *cutflow << SaveVar();
+//    }
 
 
     *cutflow << NewVar("pass_e24_lhmedium_iloose_L1EM18VH"); {
         *cutflow << HFTname("trig_e24_lhmedium_iloose_L1EM18VH");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e24_lhmedium_iloose_L1EM18VH;
         };
         *cutflow << SaveVar();
@@ -627,7 +627,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e24_lhmedium_iloose_L1EM20VH"); {
         *cutflow << HFTname("trig_e24_lhmedium_iloose_L1EM20VH");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e24_lhmedium_iloose_L1EM20VH;
         };
         *cutflow << SaveVar();
@@ -636,7 +636,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e24_lhmedium_L1EM20VHI"); {
         *cutflow << HFTname("trig_e24_lhmedium_L1EM20VHI");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e24_lhmedium_L1EM20VHI;
         };
         *cutflow << SaveVar();
@@ -645,7 +645,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e24_lhtight_iloose"); {
         *cutflow << HFTname("trig_e24_lhtight_iloose");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e24_lhtight_iloose;
         };
         *cutflow << SaveVar();
@@ -654,7 +654,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e24_lhtight_nod0_iloose"); {
         *cutflow << HFTname("trig_e24_lhtight_nod0_iloose");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e24_lhtight_nod0_iloose;
         };
         *cutflow << SaveVar();
@@ -663,7 +663,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e24_lhmedium_nod0_iloose_L1EM20VH"); {
         *cutflow << HFTname("trig_e24_lhmedium_nod0_iloose_L1EM20VH");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e24_lhmedium_nod0_iloose_L1EM20VH;
         };
         *cutflow << SaveVar();
@@ -672,7 +672,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e24_lhtight_ivarloose"); {
         *cutflow << HFTname("trig_e24_lhtight_ivarloose");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e24_lhtight_ivarloose;
         };
         *cutflow << SaveVar();
@@ -681,7 +681,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e24_lhtight_nod0_ivarloose"); {
         *cutflow << HFTname("trig_e24_lhtight_nod0_ivarloose");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e24_lhtight_nod0_ivarloose;
         };
         *cutflow << SaveVar();
@@ -690,7 +690,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e26_lhmedium_L1EM22VHI"); {
         *cutflow << HFTname("trig_e26_lhmedium_L1EM22VHI");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e26_lhmedium_L1EM22VHI;
         };
         *cutflow << SaveVar();
@@ -699,7 +699,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e26_lhtight_iloose"); {
         *cutflow << HFTname("trig_e26_lhtight_iloose");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e26_lhtight_iloose;
         };
         *cutflow << SaveVar();
@@ -708,7 +708,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e26_lhtight_nod0_iloose"); {
         *cutflow << HFTname("trig_e26_lhtight_iloose_nod0");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e26_lhtight_nod0_iloose;
         };
         *cutflow << SaveVar();
@@ -717,7 +717,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e26_lhtight_ivarloose"); {
         *cutflow << HFTname("trig_e26_lhtight_ivarloose");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e26_lhtight_ivarloose;
         };
         *cutflow << SaveVar();
@@ -726,7 +726,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e26_lhtight_nod0_ivarloose"); {
         *cutflow << HFTname("trig_e26_lhtight_nod0_ivarloose");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e26_lhtight_nod0_ivarloose;
         };
         *cutflow << SaveVar();
@@ -735,7 +735,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e60_lhmedium"); {
         *cutflow << HFTname("trig_e60_lhmedium");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e60_lhmedium;
         };
         *cutflow << SaveVar();
@@ -744,7 +744,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e60_lhmedium_nod0"); {
         *cutflow << HFTname("trig_e60_lhmedium_nod0");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e60_lhmedium_nod0;
         };
         *cutflow << SaveVar();
@@ -752,7 +752,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e120_lhloose"); {
         *cutflow << HFTname("trig_e120_lhloose");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e120_lhloose;
         };
         *cutflow << SaveVar();
@@ -760,7 +760,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e140_lhloose_nod0"); {
         *cutflow << HFTname("trig_e140_lhloose_nod0");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e140_lhloose_nod0;
         };
         *cutflow << SaveVar();
@@ -769,7 +769,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_2e12_lhloose_L12EM10VH"); {
         *cutflow << HFTname("trig_2e12_lhloose_L12EM10VH");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_2e12_lhloose_L12EM10VH;
         };
         *cutflow << SaveVar();
@@ -778,7 +778,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_2e15_lhloose_L12EM13VH"); {
         *cutflow << HFTname("trig_2e15_lhloose_L12EM13VH");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_2e15_lhloose_L12EM13VH;
         };
         *cutflow << SaveVar();
@@ -787,7 +787,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_2e15_lhvloose_L12EM13VH"); {
         *cutflow << HFTname("trig_2e15_lhvloose_L12EM13VH");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_2e15_lhvloose_L12EM13VH;
         };
         *cutflow << SaveVar();
@@ -796,7 +796,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_2e15_lhvloose_nod0_L12EM13VH"); {
         *cutflow << HFTname("trig_2e15_lhvloose_nod0_L12EM13VH");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_2e15_lhvloose_nod0_L12EM13VH;
         };
         *cutflow << SaveVar();
@@ -805,7 +805,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_2e17_lhloose"); {
         *cutflow << HFTname("trig_2e17_lhloose");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_2e17_lhloose;
         };
         *cutflow << SaveVar();
@@ -814,7 +814,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_2e17_lhvloose"); {
         *cutflow << HFTname("trig_2e17_lhvloose");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_2e17_lhvloose;
         };
         *cutflow << SaveVar();
@@ -823,7 +823,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_2e17_lhvloose_nod0"); {
         *cutflow << HFTname("trig_2e17_lhvloose_nod0");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_2e17_lhvloose_nod0;
         };
         *cutflow << SaveVar();
@@ -832,7 +832,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e17_lhloose_mu14"); {
         *cutflow << HFTname("trig_e17_lhloose_mu14");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e17_lhloose_mu14;
         };
         *cutflow << SaveVar();
@@ -841,7 +841,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e17_lhloose_nod0_mu14"); {
         *cutflow << HFTname("trig_e17_lhloose_nod0_mu14");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e17_lhloose_nod0_mu14;
         };
         *cutflow << SaveVar();
@@ -850,7 +850,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e7_lhmedium_mu24"); {
         *cutflow << HFTname("trig_e7_lhmedium_mu24");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e7_lhmedium_mu24;
         };
         *cutflow << SaveVar();
@@ -859,7 +859,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e7_lhmedium_nod0_mu24"); {
         *cutflow << HFTname("trig_e7_lhmedium_nod0_mu24");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e7_lhmedium_nod0_mu24;
         };
         *cutflow << SaveVar();
@@ -868,7 +868,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e26_lhmedium_L1EM22VHI_mu8noL1"); {
         *cutflow << HFTname("trig_e26_lhmedium_L1EM22VHI_mu8noL1");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e26_lhmedium_L1EM22VHI_mu8noL1;
         };
         *cutflow << SaveVar();
@@ -876,7 +876,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e26_lhmedium_nod0_L1EM22VHI_mu8noL1"); {
         *cutflow << HFTname("trig_e26_lhmedium_nod0_L1EM22VHI_mu8noL1");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e26_lhmedium_nod0_L1EM22VHI_mu8noL1;
         };
         *cutflow << SaveVar();
@@ -884,7 +884,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e26_lhmedium_nod0_L1EM22VHI_mu8noL1"); {
         *cutflow << HFTname("trig_e26_lhmedium_nod0_L1EM22VHI_mu8noL1");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e26_lhmedium_nod0_L1EM22VHI_mu8noL1;
         };
         *cutflow << SaveVar();
@@ -893,7 +893,7 @@ int main(int argc, char* argv[])
 
     *cutflow << NewVar("pass_e24_lhmedium_L1EM20VHI_mu8noL1"); {
         *cutflow << HFTname("trig_e24_lhmedium_L1EM20VHI_mu8noL1");
-        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+        *cutflow << [&](Superlink* /*sl*/, var_bool*) -> bool {
             return p_e24_lhmedium_L1EM20VHI_mu8noL1;
         };
         *cutflow << SaveVar();
@@ -1154,8 +1154,15 @@ int main(int argc, char* argv[])
         };
         *cutflow << SaveVar();
     }
-    
 
+    *cutflow << NewVar("run"); {
+        *cutflow << HFTname("runNumber");
+        *cutflow << [&](Superlink* sl, var_int*) -> int {
+            return sl->nt->evt()->run;
+        };
+        *cutflow << SaveVar();
+    }
+    
 
     *cutflow << NewVar("mcid"); {
         *cutflow << HFTname("mcid");
@@ -1165,7 +1172,7 @@ int main(int argc, char* argv[])
         *cutflow << SaveVar();
     }
 
-    *cutflow << NewVar("year (either 2015 or 2016 for data)"); {
+    *cutflow << NewVar("year"); {
         *cutflow << HFTname("year");
         *cutflow << [&](Superlink* sl, var_int*) -> int { 
             return sl->nt->evt()->treatAsYear;
@@ -1188,24 +1195,7 @@ int main(int argc, char* argv[])
         };
         *cutflow << SaveVar();
     }
-    *cutflow << NewVar("event weight with Sherpa V+Jets weight"); {
-        *cutflow << HFTname("eventweightVJets");
-        *cutflow << [&](Superlink* sl, var_double*) -> double {
-            double weight = sl->weights->product() * sl->nt->evt()->wPileup;
-            if(sl->nt->evt()->isSherpaVjetsSample)
-                weight *= sl->nt->evt()->sherpa22VjetsWeight;
-            return weight;
-        };
-        *cutflow << SaveVar();
-    }
-    *cutflow << NewVar("event weight (no pileup)"); {
-        *cutflow << HFTname("eventweightNOPUPW");
-        *cutflow << [&](Superlink* sl, var_double*) -> double {
-            return sl->weights->product();
-        };
-        *cutflow << SaveVar();
-    }
-    
+
     *cutflow << NewVar("Pile-up weight"); {
         *cutflow << HFTname("pupw");
         *cutflow << [](Superlink* sl, var_double*) -> double {
@@ -1230,26 +1220,10 @@ int main(int argc, char* argv[])
         *cutflow << SaveVar();
     }
 
-    *cutflow << NewVar("Three body re-weighting -- Left polarized stop"); {
-        *cutflow << HFTname("susy3BodyLeftPol");
+    *cutflow << NewVar("Pile-up weight period weight"); {
+        *cutflow << HFTname("pupw_period");
         *cutflow << [](Superlink* sl, var_double*) -> double {
-            return sl->nt->evt()->susy3BodyLeftPol;
-        };
-        *cutflow << SaveVar();
-    }
-
-    *cutflow << NewVar("Three body re-weighting -- Right polarized (70%) stop"); {
-        *cutflow << HFTname("susy3BodyRightPol");
-        *cutflow << [](Superlink* sl, var_double*) -> double {
-            return sl->nt->evt()->susy3BodyRightPol;
-        };
-        *cutflow << SaveVar();
-    }
-
-    *cutflow << NewVar("Three body re-weighting -- Matrix element only"); {
-        *cutflow << HFTname("susy3BodyOnlyMass");
-        *cutflow << [](Superlink* sl, var_double*) -> double {
-            return sl->nt->evt()->susy3BodyOnlyMass;
+            return sl->nt->evt()->wPileup_period;
         };
         *cutflow << SaveVar();
     }
@@ -1540,7 +1514,7 @@ int main(int argc, char* argv[])
     }
     *cutflow << NewVar("delta eta between two leptons"); {
         *cutflow << HFTname("deta_ll");
-        *cutflow << [&](Superlink* sl, var_float*) -> double {
+        *cutflow << [&](Superlink* /* sl */, var_float*) -> double {
             double deta = -10.0;
             if(leptons.size() == 2) {
                 Lepton l0 = *leptons.at(0);
@@ -3406,22 +3380,22 @@ int main(int argc, char* argv[])
 
 
     // clear the wectors
-    *cutflow << [&](Superlink* sl, var_void*) { leptons.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { electrons.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { muons.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { jets.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { bjets.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { bjets30.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { bjets40.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { bjets50.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { bjets60.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { sjets.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { sjets30.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { sjets40.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { sjets50.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { sjets60.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { met.clear(); };
-    *cutflow << [&](Superlink* sl, var_void*) { bls_jets.clear(); blm_jets.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { leptons.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { electrons.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { muons.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { jets.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { bjets.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { bjets30.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { bjets40.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { bjets50.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { bjets60.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { sjets.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { sjets30.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { sjets40.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { sjets50.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { sjets60.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { met.clear(); };
+    *cutflow << [&](Superlink* /* sl */, var_void*) { bls_jets.clear(); blm_jets.clear(); };
 
 
     ////////////////////////////////////////////////////////////////////////
