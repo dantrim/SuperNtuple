@@ -215,14 +215,14 @@ int main(int argc, char* argv[])
     };
 
    // #warning REMOVED CUT ON B-JETS
-   // *cutflow << CutName(">=1 b-tagged jets") << [](Superlink* sl) -> bool {
-   //     int n_bjets = 0;
-   //     for(auto j : (*sl->jets)) {
-   //         if(sl->tools->jetSelector().isBJet(j)) { n_bjets++; }
-   //     }
-   //     if(n_bjets>=1) return true;
-   //     else return false;
-   // };
+   *cutflow << CutName(">=1 b-tagged jets") << [](Superlink* sl) -> bool {
+       int n_bjets = 0;
+       for(auto j : (*sl->jets)) {
+           if(sl->tools->jetSelector().isBJet(j)) { n_bjets++; }
+       }
+       if(n_bjets>=1) return true;
+       else return false;
+   };
 
     ///*
 //    *cutflow << CutName("pass trigger requirement") << [&](Superlink* sl) -> bool {
@@ -1000,10 +1000,10 @@ int main(int argc, char* argv[])
                 }
             }
             else if(isMM) {
-                //if(lead_pt>=28 && p_mu26_ivarmedium) {
-                //    return true;
-                //}
-                if( (lead_pt>=24 && sub_pt>=10) && p_mu22_mu8noL1) {
+                if(lead_pt>=28 && p_mu26_ivarmedium) {
+                    return true;
+                }
+                else if( (lead_pt>=24 && sub_pt>=10) && p_mu22_mu8noL1) {
                     return true;
                 }
                 else {
@@ -1017,7 +1017,7 @@ int main(int argc, char* argv[])
                 else if( (lead_pt>=28 && sub_pt>=10) && p_e26_lhmedium_nod0_L1EM22VHI_mu8noL1) {
                     return true;
                 }
-                else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_mu14) {
+                else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
                     return true;
                 }
                 else {
@@ -1025,13 +1025,13 @@ int main(int argc, char* argv[])
                 }
             }
             else if(isME) {
-                //if(lead_pt>=28 && p_mu26_ivarmedium) {
-                //    return true;
-                //}
+                if(lead_pt>=28 && p_mu26_ivarmedium) {
+                    return true;
+                }
                 if( (lead_pt>=26 && sub_pt>=10) && p_e7_lhmedium_nod0_mu24) {
                     return true;
                 }
-                else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_mu14) {
+                else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
                     return true;
                 }
                 else {
@@ -1079,7 +1079,7 @@ int main(int argc, char* argv[])
                 if( (lead_pt>=28 && sub_pt>=10) && p_e26_lhmedium_nod0_L1EM22VHI_mu8noL1) {
                     return true;
                 }
-                else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_mu14) {
+                else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
                     return true;
                 }
                 else {
@@ -1131,10 +1131,10 @@ int main(int argc, char* argv[])
             } // EE
             /////////////////////////////////////
             else if(isMM) {
-                //if(lead_pt>=28 && p_mu26_ivarmedium) {
-                //    return true;
-                //}
-                if( (lead_pt>=24 && sub_pt>=10) && p_mu22_mu8noL1) {
+                if(lead_pt>=28 && p_mu26_ivarmedium) {
+                    return true;
+                }
+                else if( (lead_pt>=24 && sub_pt>=10) && p_mu22_mu8noL1) {
                     return true;
                 }
                 else {
@@ -1158,10 +1158,10 @@ int main(int argc, char* argv[])
             }
             /////////////////////////////////////
             else if(isME) {
-                //if(lead_pt>=28 && p_mu26_ivarmedium) {
-                //    return true;
-                //}
-                if( (lead_pt>=26 && sub_pt>=10) && p_e7_lhmedium_nod0_mu24) {
+                if(lead_pt>=28 && p_mu26_ivarmedium) {
+                    return true;
+                }
+                else if( (lead_pt>=26 && sub_pt>=10) && p_e7_lhmedium_nod0_mu24) {
                     return true;
                 }
                 else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
@@ -1232,10 +1232,10 @@ int main(int argc, char* argv[])
             } // EE
             /////////////////////////////////////
             else if(isMM) {
-                //if(lead_pt>=28 && p_mu26_ivarmedium) {
-                //    return true;
-                //}
-                if( (lead_pt>=24 && sub_pt>=10) && p_mu22_mu8noL1) {
+                if(lead_pt>=28 && p_mu26_ivarmedium) {
+                    return true;
+                }
+                else if( (lead_pt>=24 && sub_pt>=10) && p_mu22_mu8noL1) {
                     return true;
                 }
                 else {
@@ -1259,10 +1259,10 @@ int main(int argc, char* argv[])
             }
             /////////////////////////////////////
             else if(isME) {
-                //if(lead_pt>=28 && p_mu26_ivarmedium) {
-                //    return true;
-                //}
-                if( (lead_pt>=26 && sub_pt>=10) && p_e7_lhmedium_nod0_mu24) {
+                if(lead_pt>=28 && p_mu26_ivarmedium) {
+                    return true;
+                }
+                else if( (lead_pt>=26 && sub_pt>=10) && p_e7_lhmedium_nod0_mu24) {
                     return true;
                 }
                 else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
@@ -1426,6 +1426,152 @@ int main(int argc, char* argv[])
                 exit(1);
             }
             return false;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("pass trig tight 2018"); {
+        *cutflow << HFTname("trig_tight_2018");
+        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+            if(sl->leptons->size()<2) return false;
+            bool isEE = (sl->leptons->at(0)->isEle() && sl->leptons->at(1)->isEle());
+            bool isMM = (sl->leptons->at(0)->isMu() && sl->leptons->at(1)->isMu());
+            bool isEM = (sl->leptons->at(0)->isEle() && sl->leptons->at(1)->isMu());
+            bool isME = (sl->leptons->at(0)->isMu() && sl->leptons->at(1)->isEle());
+            
+            float lead_pt = sl->leptons->at(0)->Pt();
+            float sub_pt = sl->leptons->at(1)->Pt();
+
+            //////////////////////////////////////////////
+            if(isEE) {
+                if(lead_pt >= 28 && p_e26_lhtight_nod0_ivarloose) {
+                    return true;
+                }
+                else if( (lead_pt>=19 && sub_pt>=19) && p_2e17_lhvloose_nod0_L12EM15VHI) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            } // isEE
+            //////////////////////////////////////////////
+            else if(isMM) {
+                if(lead_pt>=28 && p_mu26_ivarmedium) {
+                    return true;
+                }
+                else if( (lead_pt>=24 && sub_pt>=10) && p_mu22_mu8noL1 ) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            } // isMM
+            //////////////////////////////////////////////
+            else if(isEM) {
+                if(lead_pt>=28 && p_e26_lhtight_nod0_ivarloose) {
+                    return true;
+                }
+                else if( lead_pt>=28 && p_e26_lhmedium_nod0_mu8noL1) {
+                    return true;
+                }
+                else if( (lead_pt>=19 && sub_pt>=16) && p_e17_lhloose_nod0_mu14) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            } // isEM
+            //////////////////////////////////////////////
+            else if(isME) {
+                if(lead_pt>=28 && p_mu26_ivarmedium) {
+                    return true;
+                }
+                else if( (lead_pt>=26 && sub_pt>=9) && p_e7_lhmedium_nod0_mu24 ) {
+                    return true;
+                }
+                else if( (lead_pt>=16 && sub_pt>=19) && p_e17_lhloose_nod0_mu14) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            } // isME
+            else {
+                cout << "tright pass tight 2018 error!" << endl;
+                exit(1);
+            }
+            return false;
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("pass trig tight 2018 (dilepton only)"); {
+        *cutflow << HFTname("trig_tight_2018dil");
+        *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+            if(sl->leptons->size()<2) return false;
+            bool isEE = (sl->leptons->at(0)->isEle() && sl->leptons->at(1)->isEle());
+            bool isMM = (sl->leptons->at(0)->isMu() && sl->leptons->at(1)->isMu());
+            bool isEM = (sl->leptons->at(0)->isEle() && sl->leptons->at(1)->isMu());
+            bool isME = (sl->leptons->at(0)->isMu() && sl->leptons->at(1)->isEle());
+            
+            float lead_pt = sl->leptons->at(0)->Pt();
+            float sub_pt = sl->leptons->at(1)->Pt();
+
+            //////////////////////////////////////////////
+            if(isEE) {
+                if( (lead_pt>=19 && sub_pt>=19) && p_2e17_lhvloose_nod0_L12EM15VHI) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            } // isEE
+            //////////////////////////////////////////////
+            else if(isMM) {
+                if( (lead_pt>=24 && sub_pt>=10) && p_mu22_mu8noL1 ) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            } // isMM
+            //////////////////////////////////////////////
+            else if(isEM) {
+                if( lead_pt>=28 && p_e26_lhmedium_nod0_mu8noL1) {
+                    return true;
+                }
+                else if( (lead_pt>=19 && sub_pt>=16) && p_e17_lhloose_nod0_mu14) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            } // isEM
+            //////////////////////////////////////////////
+            else if(isME) {
+                if( (lead_pt>=26 && sub_pt>=9) && p_e7_lhmedium_nod0_mu24 ) {
+                    return true;
+                }
+                else if( (lead_pt>=16 && sub_pt>=19) && p_e17_lhloose_nod0_mu14) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            } // isME
+            else {
+                cout << "tright pass tight 2018 error!" << endl;
+                exit(1);
+            }
+            return false;
+        };
+        *cutflow << SaveVar();
+    }
+    
+    *cutflow << NewVar("eventNumber"); {
+        *cutflow << HFTname("eventNumber");
+        *cutflow << [&](Superlink* sl, var_int*) -> int {
+            return sl->nt->evt()->eventNumber;
         };
         *cutflow << SaveVar();
     }
@@ -2542,6 +2688,31 @@ int main(int argc, char* argv[])
         *cutflow << SaveVar();
     }
 
+    *cutflow << NewVar("jet dl1"); {
+        *cutflow << HFTname("j0_dl1");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            if(jets.size()>0) return jets.at(0)->dl1;
+            else return -10;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("sjet dl1"); {
+        *cutflow << HFTname("sj0_dl1");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            if(sjets.size()>0) return sjets.at(0)->dl1;
+            else return -10;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("bjet dl1"); {
+        *cutflow << HFTname("bj0_dl1");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            if(bjets.size()>0) return bjets.at(0)->dl1;
+            else return -10;
+        };
+        *cutflow << SaveVar();
+    }
+
     *cutflow << NewVar("number of jets"); {
         *cutflow << HFTname("nJets");
         *cutflow << [&](Superlink* /*sl*/, var_int*) -> int {
@@ -2754,6 +2925,16 @@ int main(int argc, char* argv[])
         *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
             if(sjets.size()>2) return sjets.at(2)->Eta();
             else return -10.;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("lead bjet eta"); {
+        *cutflow << HFTname("bj0_eta");
+        *cutflow << [&](Superlink* /*sl*/, var_float*) -> double {
+            float val = var_means.at("bj0_eta");
+            if(bjets.size()>0) val = bjets.at(0)->Eta();
+            nn_input["bj0_eta"] = val;
+            return val;
         };
         *cutflow << SaveVar();
     }
@@ -3840,26 +4021,26 @@ int main(int argc, char* argv[])
     // weight systematics
     ////////////////////////////////////
 
-    *cutflow << NewSystematic("electron ID efficiency"); {
-        *cutflow << WeightSystematic(SupersysWeight::EL_EFF_ID_TOTAL_Uncorr_UP, SupersysWeight::EL_EFF_ID_TOTAL_Uncorr_DN);
-        *cutflow << TreeName("EL_EFF_ID");
-        *cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("electron ISO efficiency"); {
-        *cutflow << WeightSystematic(SupersysWeight::EL_EFF_Iso_TOTAL_Uncorr_UP, SupersysWeight::EL_EFF_Iso_TOTAL_Uncorr_DN);
-        *cutflow << TreeName("EL_EFF_ISO");
-        *cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("electron RECO efficiency"); {
-        *cutflow << WeightSystematic(SupersysWeight::EL_EFF_Reco_TOTAL_Uncorr_UP, SupersysWeight::EL_EFF_Reco_TOTAL_Uncorr_DN);
-        *cutflow << TreeName("EL_EFF_RECO");
-        *cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("electron Trigger efficiency"); {
-        *cutflow << WeightSystematic(SupersysWeight::EL_EFF_Trigger_TOTAL_UP, SupersysWeight::EL_EFF_Trigger_TOTAL_DN);
-        *cutflow << TreeName("EL_EFF_TRIG");
-        *cutflow << SaveSystematic();
-    }
+//    *cutflow << NewSystematic("electron ID efficiency"); {
+//        *cutflow << WeightSystematic(SupersysWeight::EL_EFF_ID_TOTAL_Uncorr_UP, SupersysWeight::EL_EFF_ID_TOTAL_Uncorr_DN);
+//        *cutflow << TreeName("EL_EFF_ID");
+//        *cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("electron ISO efficiency"); {
+//        *cutflow << WeightSystematic(SupersysWeight::EL_EFF_Iso_TOTAL_Uncorr_UP, SupersysWeight::EL_EFF_Iso_TOTAL_Uncorr_DN);
+//        *cutflow << TreeName("EL_EFF_ISO");
+//        *cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("electron RECO efficiency"); {
+//        *cutflow << WeightSystematic(SupersysWeight::EL_EFF_Reco_TOTAL_Uncorr_UP, SupersysWeight::EL_EFF_Reco_TOTAL_Uncorr_DN);
+//        *cutflow << TreeName("EL_EFF_RECO");
+//        *cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("electron Trigger efficiency"); {
+//        *cutflow << WeightSystematic(SupersysWeight::EL_EFF_Trigger_TOTAL_UP, SupersysWeight::EL_EFF_Trigger_TOTAL_DN);
+//        *cutflow << TreeName("EL_EFF_TRIG");
+//        *cutflow << SaveSystematic();
+//    }
 
     // flavor tagging
     *cutflow << NewSystematic("FTAG EFF B"); {
@@ -3895,57 +4076,57 @@ int main(int argc, char* argv[])
         *cutflow << SaveSystematic();
     }
 
-    // muon
-    *cutflow << NewSystematic("Muon Bad Muon Stat"); {
-        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_BADMUON_STAT_UP, SupersysWeight::MUON_EFF_BADMUON_STAT_DN);
-        *cutflow << TreeName("BadMuonStat");
-        *cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("Muon Bad Muon Syst"); {
-        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_BADMUON_SYS_UP, SupersysWeight::MUON_EFF_BADMUON_SYS_DN);
-        *cutflow << TreeName("BadMuonSys");
-        *cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("Muon Eff ISO Stat"); {
-        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_ISO_STAT_UP, SupersysWeight::MUON_EFF_ISO_STAT_DN);
-        *cutflow << TreeName("MU_EFF_ISO_STAT");
-        *cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("Muon Eff ISO Syst"); {
-        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_ISO_SYS_UP, SupersysWeight::MUON_EFF_ISO_SYS_DN);
-        *cutflow << TreeName("MU_EFF_ISO_SYS");
-        *cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("Muon Eff RECO Stat"); {
-        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_RECO_STAT_UP, SupersysWeight::MUON_EFF_RECO_STAT_DN);
-        *cutflow << TreeName("MU_EFF_RECO_STAT");
-        *cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("Muon Eff RECO Syst"); {
-        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_RECO_SYS_UP, SupersysWeight::MUON_EFF_RECO_SYS_DN);
-        *cutflow << TreeName("MU_EFF_RECO_SYS");
-        *cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("Muon Eff TTVA STAT"); {
-        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_TTVA_STAT_UP, SupersysWeight::MUON_EFF_TTVA_STAT_DN);
-        *cutflow << TreeName("MU_EFF_TTVA_STAT");
-        *cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("Muon Eff TTVA SYS"); {
-        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_TTVA_SYS_UP, SupersysWeight::MUON_EFF_TTVA_SYS_DN);
-        *cutflow << TreeName("MU_EFF_TTVA_SYS");
-        *cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("Muon Eff TRIG STAT"); {
-        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_TrigStat_UP, SupersysWeight::MUON_EFF_TrigStat_DN);
-        *cutflow << TreeName("MU_EFF_TRIG_STAT");
-        *cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("Muon Eff TRIG SYS"); {
-        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_TrigSys_UP, SupersysWeight::MUON_EFF_TrigSys_DN);
-        *cutflow << TreeName("MU_EFF_TRIG_SYS");
-        *cutflow << SaveSystematic();
-    }
+//    // muon
+//    *cutflow << NewSystematic("Muon Bad Muon Stat"); {
+//        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_BADMUON_STAT_UP, SupersysWeight::MUON_EFF_BADMUON_STAT_DN);
+//        *cutflow << TreeName("BadMuonStat");
+//        *cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("Muon Bad Muon Syst"); {
+//        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_BADMUON_SYS_UP, SupersysWeight::MUON_EFF_BADMUON_SYS_DN);
+//        *cutflow << TreeName("BadMuonSys");
+//        *cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("Muon Eff ISO Stat"); {
+//        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_ISO_STAT_UP, SupersysWeight::MUON_EFF_ISO_STAT_DN);
+//        *cutflow << TreeName("MU_EFF_ISO_STAT");
+//        *cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("Muon Eff ISO Syst"); {
+//        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_ISO_SYS_UP, SupersysWeight::MUON_EFF_ISO_SYS_DN);
+//        *cutflow << TreeName("MU_EFF_ISO_SYS");
+//        *cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("Muon Eff RECO Stat"); {
+//        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_RECO_STAT_UP, SupersysWeight::MUON_EFF_RECO_STAT_DN);
+//        *cutflow << TreeName("MU_EFF_RECO_STAT");
+//        *cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("Muon Eff RECO Syst"); {
+//        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_RECO_SYS_UP, SupersysWeight::MUON_EFF_RECO_SYS_DN);
+//        *cutflow << TreeName("MU_EFF_RECO_SYS");
+//        *cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("Muon Eff TTVA STAT"); {
+//        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_TTVA_STAT_UP, SupersysWeight::MUON_EFF_TTVA_STAT_DN);
+//        *cutflow << TreeName("MU_EFF_TTVA_STAT");
+//        *cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("Muon Eff TTVA SYS"); {
+//        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_TTVA_SYS_UP, SupersysWeight::MUON_EFF_TTVA_SYS_DN);
+//        *cutflow << TreeName("MU_EFF_TTVA_SYS");
+//        *cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("Muon Eff TRIG STAT"); {
+//        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_TrigStat_UP, SupersysWeight::MUON_EFF_TrigStat_DN);
+//        *cutflow << TreeName("MU_EFF_TRIG_STAT");
+//        *cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("Muon Eff TRIG SYS"); {
+//        *cutflow << WeightSystematic(SupersysWeight::MUON_EFF_TrigSys_UP, SupersysWeight::MUON_EFF_TrigSys_DN);
+//        *cutflow << TreeName("MU_EFF_TRIG_SYS");
+//        *cutflow << SaveSystematic();
+//    }
 
     // pileup
     *cutflow << NewSystematic("Pileup"); {
@@ -3954,121 +4135,121 @@ int main(int argc, char* argv[])
         *cutflow << SaveSystematic();
     }
 
-    *cutflow << NewSystematic("EG_RESOLUTION_ALL_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::EG_RESOLUTION_ALL_DN);
-    	*cutflow << TreeName("EG_RESOLUTION_ALL_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("EG_RESOLUTION_ALL_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::EG_RESOLUTION_ALL_UP);
-    	*cutflow << TreeName("EG_RESOLUTION_ALL_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("EG_SCALE_ALL_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::EG_SCALE_ALL_DN);
-    	*cutflow << TreeName("EG_SCALE_ALL_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("EG_SCALE_ALL_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::EG_SCALE_ALL_UP);
-    	*cutflow << TreeName("EG_SCALE_ALL_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("EL_EFF_ChargeIDSel_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::EL_EFF_ChargeIDSel_UP);
-    	*cutflow << TreeName("EL_EFF_ChargeIDSel_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("EL_EFF_ID_TOTAL_Uncorr_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::EL_EFF_ID_TOTAL_Uncorr_DN);
-    	*cutflow << TreeName("EL_EFF_ID_TOTAL_Uncorr_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("EL_EFF_ID_TOTAL_Uncorr_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::EL_EFF_ID_TOTAL_Uncorr_UP);
-    	*cutflow << TreeName("EL_EFF_ID_TOTAL_Uncorr_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("EL_EFF_Iso_TOTAL_Uncorr_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::EL_EFF_Iso_TOTAL_Uncorr_DN);
-    	*cutflow << TreeName("EL_EFF_Iso_TOTAL_Uncorr_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("EL_EFF_Iso_TOTAL_Uncorr_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::EL_EFF_Iso_TOTAL_Uncorr_UP);
-    	*cutflow << TreeName("EL_EFF_Iso_TOTAL_Uncorr_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("EL_EFF_Reco_TOTAL_Uncorr_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::EL_EFF_Reco_TOTAL_Uncorr_DN);
-    	*cutflow << TreeName("EL_EFF_Reco_TOTAL_Uncorr_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("EL_EFF_Reco_TOTAL_Uncorr_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::EL_EFF_Reco_TOTAL_Uncorr_UP);
-    	*cutflow << TreeName("EL_EFF_Reco_TOTAL_Uncorr_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("EL_EFF_Trigger_TOTAL_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::EL_EFF_Trigger_TOTAL_DN);
-    	*cutflow << TreeName("EL_EFF_Trigger_TOTAL_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("EL_EFF_Trigger_TOTAL_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::EL_EFF_Trigger_TOTAL_UP);
-    	*cutflow << TreeName("EL_EFF_Trigger_TOTAL_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("FT_EFF_B_systematics_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::FT_EFF_B_systematics_UP);
-    	*cutflow << TreeName("FT_EFF_B_systematics_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("FT_EFF_B_systematics_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::FT_EFF_B_systematics_DN);
-    	*cutflow << TreeName("FT_EFF_B_systematics_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("FT_EFF_C_systematics_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::FT_EFF_C_systematics_UP);
-    	*cutflow << TreeName("FT_EFF_C_systematics_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("FT_EFF_C_systematics_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::FT_EFF_C_systematics_DN);
-    	*cutflow << TreeName("FT_EFF_C_systematics_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("FT_EFF_Light_systematics_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::FT_EFF_Light_systematics_UP);
-    	*cutflow << TreeName("FT_EFF_Light_systematics_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("FT_EFF_Light_systematics_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::FT_EFF_Light_systematics_DN);
-    	*cutflow << TreeName("FT_EFF_Light_systematics_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("FT_EFF_extrapolation_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::FT_EFF_extrapolation_UP);
-    	*cutflow << TreeName("FT_EFF_extrapolation_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("FT_EFF_extrapolation_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::FT_EFF_extrapolation_DN);
-    	*cutflow << TreeName("FT_EFF_extrapolation_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("FT_EFF_extrapolation_charm_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::FT_EFF_extrapolation_charm_UP);
-    	*cutflow << TreeName("FT_EFF_extrapolation_charm_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("FT_EFF_extrapolation_charm_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::FT_EFF_extrapolation_charm_DN);
-    	*cutflow << TreeName("FT_EFF_extrapolation_charm_DN");
-    	*cutflow << SaveSystematic();
-    }
+//    *cutflow << NewSystematic("EG_RESOLUTION_ALL_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::EG_RESOLUTION_ALL_DN);
+//    	*cutflow << TreeName("EG_RESOLUTION_ALL_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("EG_RESOLUTION_ALL_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::EG_RESOLUTION_ALL_UP);
+//    	*cutflow << TreeName("EG_RESOLUTION_ALL_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("EG_SCALE_ALL_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::EG_SCALE_ALL_DN);
+//    	*cutflow << TreeName("EG_SCALE_ALL_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("EG_SCALE_ALL_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::EG_SCALE_ALL_UP);
+//    	*cutflow << TreeName("EG_SCALE_ALL_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("EL_EFF_ChargeIDSel_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::EL_EFF_ChargeIDSel_UP);
+//    	*cutflow << TreeName("EL_EFF_ChargeIDSel_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("EL_EFF_ID_TOTAL_Uncorr_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::EL_EFF_ID_TOTAL_Uncorr_DN);
+//    	*cutflow << TreeName("EL_EFF_ID_TOTAL_Uncorr_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("EL_EFF_ID_TOTAL_Uncorr_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::EL_EFF_ID_TOTAL_Uncorr_UP);
+//    	*cutflow << TreeName("EL_EFF_ID_TOTAL_Uncorr_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("EL_EFF_Iso_TOTAL_Uncorr_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::EL_EFF_Iso_TOTAL_Uncorr_DN);
+//    	*cutflow << TreeName("EL_EFF_Iso_TOTAL_Uncorr_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("EL_EFF_Iso_TOTAL_Uncorr_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::EL_EFF_Iso_TOTAL_Uncorr_UP);
+//    	*cutflow << TreeName("EL_EFF_Iso_TOTAL_Uncorr_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("EL_EFF_Reco_TOTAL_Uncorr_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::EL_EFF_Reco_TOTAL_Uncorr_DN);
+//    	*cutflow << TreeName("EL_EFF_Reco_TOTAL_Uncorr_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("EL_EFF_Reco_TOTAL_Uncorr_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::EL_EFF_Reco_TOTAL_Uncorr_UP);
+//    	*cutflow << TreeName("EL_EFF_Reco_TOTAL_Uncorr_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("EL_EFF_Trigger_TOTAL_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::EL_EFF_Trigger_TOTAL_DN);
+//    	*cutflow << TreeName("EL_EFF_Trigger_TOTAL_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("EL_EFF_Trigger_TOTAL_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::EL_EFF_Trigger_TOTAL_UP);
+//    	*cutflow << TreeName("EL_EFF_Trigger_TOTAL_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("FT_EFF_B_systematics_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::FT_EFF_B_systematics_UP);
+//    	*cutflow << TreeName("FT_EFF_B_systematics_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("FT_EFF_B_systematics_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::FT_EFF_B_systematics_DN);
+//    	*cutflow << TreeName("FT_EFF_B_systematics_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("FT_EFF_C_systematics_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::FT_EFF_C_systematics_UP);
+//    	*cutflow << TreeName("FT_EFF_C_systematics_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("FT_EFF_C_systematics_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::FT_EFF_C_systematics_DN);
+//    	*cutflow << TreeName("FT_EFF_C_systematics_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("FT_EFF_Light_systematics_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::FT_EFF_Light_systematics_UP);
+//    	*cutflow << TreeName("FT_EFF_Light_systematics_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("FT_EFF_Light_systematics_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::FT_EFF_Light_systematics_DN);
+//    	*cutflow << TreeName("FT_EFF_Light_systematics_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("FT_EFF_extrapolation_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::FT_EFF_extrapolation_UP);
+//    	*cutflow << TreeName("FT_EFF_extrapolation_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("FT_EFF_extrapolation_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::FT_EFF_extrapolation_DN);
+//    	*cutflow << TreeName("FT_EFF_extrapolation_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("FT_EFF_extrapolation_charm_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::FT_EFF_extrapolation_charm_UP);
+//    	*cutflow << TreeName("FT_EFF_extrapolation_charm_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("FT_EFF_extrapolation_charm_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::FT_EFF_extrapolation_charm_DN);
+//    	*cutflow << TreeName("FT_EFF_extrapolation_charm_DN");
+//    	*cutflow << SaveSystematic();
+//    }
     *cutflow << NewSystematic("JET_JER_DataVsMC_UP (UP)"); {
     	*cutflow << EventSystematic(NtSys::JET_JER_DataVsMC_UP);
     	*cutflow << TreeName("JET_JER_DataVsMC_UP");
@@ -4189,16 +4370,6 @@ int main(int argc, char* argv[])
     	*cutflow << TreeName("JET_EtaIntercalibration_DN");
     	*cutflow << SaveSystematic();
     }
-    *cutflow << NewSystematic("JET_JVTEff_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::JET_JVTEff_UP);
-    	*cutflow << TreeName("JET_JVTEff_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("JET_JVTEff_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::JET_JVTEff_DN);
-    	*cutflow << TreeName("JET_JVTEff_DN");
-    	*cutflow << SaveSystematic();
-    }
     *cutflow << NewSystematic("MET_SoftTrk_ResoPara"); {
     	*cutflow << EventSystematic(NtSys::MET_SoftTrk_ResoPara);
     	*cutflow << TreeName("MET_SoftTrk_ResoPara");
@@ -4219,176 +4390,176 @@ int main(int argc, char* argv[])
     	*cutflow << TreeName("MET_SoftTrk_ScaleUp");
     	*cutflow << SaveSystematic();
     }
-    *cutflow << NewSystematic("MUON_EFF_BADMUON_STAT_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_BADMUON_STAT_DN);
-    	*cutflow << TreeName("MUON_EFF_BADMUON_STAT_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_BADMUON_STAT_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_BADMUON_STAT_UP);
-    	*cutflow << TreeName("MUON_EFF_BADMUON_STAT_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_BADMUON_SYS_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_BADMUON_SYS_DN);
-    	*cutflow << TreeName("MUON_EFF_BADMUON_SYS_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_BADMUON_SYS_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_BADMUON_SYS_UP);
-    	*cutflow << TreeName("MUON_EFF_BADMUON_SYS_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_ISO_STAT_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_ISO_STAT_DN);
-    	*cutflow << TreeName("MUON_EFF_ISO_STAT_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_ISO_STAT_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_ISO_STAT_UP);
-    	*cutflow << TreeName("MUON_EFF_ISO_STAT_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_ISO_SYS_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_ISO_SYS_DN);
-    	*cutflow << TreeName("MUON_EFF_ISO_SYS_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_ISO_SYS_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_ISO_SYS_UP);
-    	*cutflow << TreeName("MUON_EFF_ISO_SYS_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_RECO_STAT_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_STAT_DN);
-    	*cutflow << TreeName("MUON_EFF_RECO_STAT_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_RECO_STAT_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_STAT_UP);
-    	*cutflow << TreeName("MUON_EFF_RECO_STAT_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_RECO_SYS_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_SYS_DN);
-    	*cutflow << TreeName("MUON_EFF_RECO_SYS_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_RECO_SYS_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_SYS_UP);
-    	*cutflow << TreeName("MUON_EFF_RECO_SYS_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_RECO_STAT_LOWPT_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_STAT_LOWPT_DN);
-    	*cutflow << TreeName("MUON_EFF_RECO_STAT_LOWPT_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_RECO_STAT_LOWPT_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_STAT_LOWPT_UP);
-    	*cutflow << TreeName("MUON_EFF_RECO_STAT_LOWPT_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_RECO_SYS_LOWPT_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_SYS_LOWPT_DN);
-    	*cutflow << TreeName("MUON_EFF_RECO_SYS_LOWPT_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_RECO_SYS_LOWPT_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_SYS_LOWPT_UP);
-    	*cutflow << TreeName("MUON_EFF_RECO_SYS_LOWPT_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_TTVA_STAT_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_TTVA_STAT_DN);
-    	*cutflow << TreeName("MUON_EFF_TTVA_STAT_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_TTVA_STAT_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_TTVA_STAT_UP);
-    	*cutflow << TreeName("MUON_EFF_TTVA_STAT_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_TTVA_SYS_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_TTVA_SYS_DN);
-    	*cutflow << TreeName("MUON_EFF_TTVA_SYS_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_TTVA_SYS_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_TTVA_SYS_UP);
-    	*cutflow << TreeName("MUON_EFF_TTVA_SYS_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_TrigStat_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_TrigStat_DN);
-    	*cutflow << TreeName("MUON_EFF_TrigStat_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_TrigStat_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_TrigStat_UP);
-    	*cutflow << TreeName("MUON_EFF_TrigStat_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_TrigSys_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_TrigSys_DN);
-    	*cutflow << TreeName("MUON_EFF_TrigSys_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_EFF_TrigSys_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_EFF_TrigSys_UP);
-    	*cutflow << TreeName("MUON_EFF_TrigSys_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_MS_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_MS_DN);
-    	*cutflow << TreeName("MUON_MS_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_MS_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_MS_UP);
-    	*cutflow << TreeName("MUON_MS_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_ID_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_ID_DN);
-    	*cutflow << TreeName("MUON_ID_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_ID_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_ID_UP);
-    	*cutflow << TreeName("MUON_ID_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_SAGITTA_RESBIAS_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_SAGITTA_RESBIAS_DN);
-    	*cutflow << TreeName("MUON_SAGITTA_RESBIAS_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_SAGITTA_RESBIAS_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_SAGITTA_RESBIAS_UP);
-    	*cutflow << TreeName("MUON_SAGITTA_RESBIAS_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_SAGITTA_RHO_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_SAGITTA_RHO_DN);
-    	*cutflow << TreeName("MUON_SAGITTA_RHO_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_SAGITTA_RHO_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_SAGITTA_RHO_UP);
-    	*cutflow << TreeName("MUON_SAGITTA_RHO_UP");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_SCALE_DN (DN)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_SCALE_DN);
-    	*cutflow << TreeName("MUON_SCALE_DN");
-    	*cutflow << SaveSystematic();
-    }
-    *cutflow << NewSystematic("MUON_SCALE_UP (UP)"); {
-    	*cutflow << EventSystematic(NtSys::MUON_SCALE_UP);
-    	*cutflow << TreeName("MUON_SCALE_UP");
-    	*cutflow << SaveSystematic();
-    }
+//    *cutflow << NewSystematic("MUON_EFF_BADMUON_STAT_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_BADMUON_STAT_DN);
+//    	*cutflow << TreeName("MUON_EFF_BADMUON_STAT_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_BADMUON_STAT_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_BADMUON_STAT_UP);
+//    	*cutflow << TreeName("MUON_EFF_BADMUON_STAT_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_BADMUON_SYS_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_BADMUON_SYS_DN);
+//    	*cutflow << TreeName("MUON_EFF_BADMUON_SYS_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_BADMUON_SYS_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_BADMUON_SYS_UP);
+//    	*cutflow << TreeName("MUON_EFF_BADMUON_SYS_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_ISO_STAT_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_ISO_STAT_DN);
+//    	*cutflow << TreeName("MUON_EFF_ISO_STAT_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_ISO_STAT_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_ISO_STAT_UP);
+//    	*cutflow << TreeName("MUON_EFF_ISO_STAT_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_ISO_SYS_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_ISO_SYS_DN);
+//    	*cutflow << TreeName("MUON_EFF_ISO_SYS_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_ISO_SYS_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_ISO_SYS_UP);
+//    	*cutflow << TreeName("MUON_EFF_ISO_SYS_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_RECO_STAT_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_STAT_DN);
+//    	*cutflow << TreeName("MUON_EFF_RECO_STAT_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_RECO_STAT_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_STAT_UP);
+//    	*cutflow << TreeName("MUON_EFF_RECO_STAT_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_RECO_SYS_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_SYS_DN);
+//    	*cutflow << TreeName("MUON_EFF_RECO_SYS_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_RECO_SYS_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_SYS_UP);
+//    	*cutflow << TreeName("MUON_EFF_RECO_SYS_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_RECO_STAT_LOWPT_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_STAT_LOWPT_DN);
+//    	*cutflow << TreeName("MUON_EFF_RECO_STAT_LOWPT_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_RECO_STAT_LOWPT_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_STAT_LOWPT_UP);
+//    	*cutflow << TreeName("MUON_EFF_RECO_STAT_LOWPT_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_RECO_SYS_LOWPT_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_SYS_LOWPT_DN);
+//    	*cutflow << TreeName("MUON_EFF_RECO_SYS_LOWPT_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_RECO_SYS_LOWPT_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_RECO_SYS_LOWPT_UP);
+//    	*cutflow << TreeName("MUON_EFF_RECO_SYS_LOWPT_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_TTVA_STAT_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_TTVA_STAT_DN);
+//    	*cutflow << TreeName("MUON_EFF_TTVA_STAT_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_TTVA_STAT_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_TTVA_STAT_UP);
+//    	*cutflow << TreeName("MUON_EFF_TTVA_STAT_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_TTVA_SYS_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_TTVA_SYS_DN);
+//    	*cutflow << TreeName("MUON_EFF_TTVA_SYS_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_TTVA_SYS_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_TTVA_SYS_UP);
+//    	*cutflow << TreeName("MUON_EFF_TTVA_SYS_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_TrigStat_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_TrigStat_DN);
+//    	*cutflow << TreeName("MUON_EFF_TrigStat_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_TrigStat_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_TrigStat_UP);
+//    	*cutflow << TreeName("MUON_EFF_TrigStat_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_TrigSys_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_TrigSys_DN);
+//    	*cutflow << TreeName("MUON_EFF_TrigSys_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_EFF_TrigSys_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_EFF_TrigSys_UP);
+//    	*cutflow << TreeName("MUON_EFF_TrigSys_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_MS_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_MS_DN);
+//    	*cutflow << TreeName("MUON_MS_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_MS_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_MS_UP);
+//    	*cutflow << TreeName("MUON_MS_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_ID_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_ID_DN);
+//    	*cutflow << TreeName("MUON_ID_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_ID_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_ID_UP);
+//    	*cutflow << TreeName("MUON_ID_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_SAGITTA_RESBIAS_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_SAGITTA_RESBIAS_DN);
+//    	*cutflow << TreeName("MUON_SAGITTA_RESBIAS_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_SAGITTA_RESBIAS_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_SAGITTA_RESBIAS_UP);
+//    	*cutflow << TreeName("MUON_SAGITTA_RESBIAS_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_SAGITTA_RHO_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_SAGITTA_RHO_DN);
+//    	*cutflow << TreeName("MUON_SAGITTA_RHO_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_SAGITTA_RHO_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_SAGITTA_RHO_UP);
+//    	*cutflow << TreeName("MUON_SAGITTA_RHO_UP");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_SCALE_DN (DN)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_SCALE_DN);
+//    	*cutflow << TreeName("MUON_SCALE_DN");
+//    	*cutflow << SaveSystematic();
+//    }
+//    *cutflow << NewSystematic("MUON_SCALE_UP (UP)"); {
+//    	*cutflow << EventSystematic(NtSys::MUON_SCALE_UP);
+//    	*cutflow << TreeName("MUON_SCALE_UP");
+//    	*cutflow << SaveSystematic();
+//    }
 
 //
 //    ////////////////////////////////////
