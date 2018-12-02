@@ -214,7 +214,6 @@ int main(int argc, char* argv[])
         return pass;
     };
 
-   // #warning REMOVED CUT ON B-JETS
    *cutflow << CutName(">=1 b-tagged jets") << [](Superlink* sl) -> bool {
        int n_bjets = 0;
        for(auto j : (*sl->jets)) {
@@ -884,10 +883,10 @@ int main(int argc, char* argv[])
                 if(lead_pt>=26 && p_e24_lhmedium_L1EM20VH) {
                     return true;
                 }
-                else if( (lead_pt>=26 && sub_pt>=10) && p_e24_lhmedium_nod0_L1EM20VHI_mu8noL1) {
-                    return true;
-                }
-                else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_mu14) {
+                //else if( (lead_pt>=26 && sub_pt>=10) && p_e24_lhmedium_nod0_L1EM20VHI_mu8noL1) {
+                //    return true;
+                //}
+                else if( (lead_pt>=19 && sub_pt>=16) && p_e17_lhloose_mu14) {
                     return true;
                 }
                 else {
@@ -898,7 +897,7 @@ int main(int argc, char* argv[])
                 if(lead_pt>=22 && p_mu20_iloose_L1MU15) {
                     return true;
                 }
-                else if( (lead_pt>=26 && sub_pt>=10) && p_e7_lhmedium_mu24) {
+                else if( (lead_pt>=26 && sub_pt>=9) && p_e7_lhmedium_mu24) {
                     return true;
                 }
                 else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_mu14) {
@@ -946,10 +945,10 @@ int main(int argc, char* argv[])
                 }
             }
             else if(isEM) {
-                if( (lead_pt>=26 && sub_pt>=10) && p_e24_lhmedium_nod0_L1EM20VHI_mu8noL1) {
-                    return true;
-                }
-                else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_mu14) {
+                //if( (lead_pt>=26 && sub_pt>=10) && p_e24_lhmedium_nod0_L1EM20VHI_mu8noL1) {
+                //    return true;
+                //}
+                if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_mu14) {
                     return true;
                 }
                 else {
@@ -1028,7 +1027,7 @@ int main(int argc, char* argv[])
                 if(lead_pt>=28 && p_mu26_ivarmedium) {
                     return true;
                 }
-                if( (lead_pt>=26 && sub_pt>=10) && p_e7_lhmedium_nod0_mu24) {
+                if( (lead_pt>=26 && sub_pt>=9) && p_e7_lhmedium_nod0_mu24) {
                     return true;
                 }
                 else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
@@ -1087,7 +1086,7 @@ int main(int argc, char* argv[])
                 }
             }
             else if(isME) {
-                if( (lead_pt>=26 && sub_pt>=10) && p_e7_lhmedium_nod0_mu24) {
+                if( (lead_pt>=26 && sub_pt>=9) && p_e7_lhmedium_nod0_mu24) {
                     return true;
                 }
                 else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
@@ -1161,7 +1160,7 @@ int main(int argc, char* argv[])
                 if(lead_pt>=28 && p_mu26_ivarmedium) {
                     return true;
                 }
-                else if( (lead_pt>=26 && sub_pt>=10) && p_e7_lhmedium_nod0_mu24) {
+                else if( (lead_pt>=26 && sub_pt>=9) && p_e7_lhmedium_nod0_mu24) {
                     return true;
                 }
                 else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
@@ -1204,7 +1203,8 @@ int main(int argc, char* argv[])
                 }
                 else if(isMC) {
                     float random_number = uniform_distribution(generator);
-                    if(random_number < (0.6 / 78.2)) {
+                    if(random_number < (0.6 / 140.)) {
+                    //if(random_number < (0.6 / 78.2)) {
                         if( (lead_pt>=26 && sub_pt>=26) && p_2e24_lhvloose_nod0) {
                             return true;
                         }
@@ -1262,7 +1262,7 @@ int main(int argc, char* argv[])
                 if(lead_pt>=28 && p_mu26_ivarmedium) {
                     return true;
                 }
-                else if( (lead_pt>=26 && sub_pt>=10) && p_e7_lhmedium_nod0_mu24) {
+                else if( (lead_pt>=26 && sub_pt>=9) && p_e7_lhmedium_nod0_mu24) {
                     return true;
                 }
                 else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
@@ -1362,7 +1362,7 @@ int main(int argc, char* argv[])
             if(isEE) {
                 if(isMC) {
                     float random_number = uniform_distribution(generator);
-                    if(random_number < (0.6 / 78.2)) {
+                    if(random_number < (0.6 / 140.)) {
                         if( (lead_pt>=26 && sub_pt>=26) && p_2e24_lhvloose_nod0) {
                             return true;
                         }
@@ -1411,7 +1411,7 @@ int main(int argc, char* argv[])
             }
             /////////////////////////////////////
             else if(isME) {
-                if( (lead_pt>=26 && sub_pt>=10) && p_e7_lhmedium_nod0_mu24) {
+                if( (lead_pt>=26 && sub_pt>=9) && p_e7_lhmedium_nod0_mu24) {
                     return true;
                 }
                 else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
@@ -1471,10 +1471,10 @@ int main(int argc, char* argv[])
                 if(lead_pt>=28 && p_e26_lhtight_nod0_ivarloose) {
                     return true;
                 }
-                else if( lead_pt>=28 && p_e26_lhmedium_nod0_mu8noL1) {
+                else if( (lead_pt>=28 && sub_pt>=10) && p_e26_lhmedium_nod0_mu8noL1) {
                     return true;
                 }
-                else if( (lead_pt>=19 && sub_pt>=16) && p_e17_lhloose_nod0_mu14) {
+                else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
                     return true;
                 }
                 else {
@@ -1489,7 +1489,7 @@ int main(int argc, char* argv[])
                 else if( (lead_pt>=26 && sub_pt>=9) && p_e7_lhmedium_nod0_mu24 ) {
                     return true;
                 }
-                else if( (lead_pt>=16 && sub_pt>=19) && p_e17_lhloose_nod0_mu14) {
+                else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
                     return true;
                 }
                 else {
@@ -1537,10 +1537,10 @@ int main(int argc, char* argv[])
             } // isMM
             //////////////////////////////////////////////
             else if(isEM) {
-                if( lead_pt>=28 && p_e26_lhmedium_nod0_mu8noL1) {
+                if( (lead_pt>=28 && sub_pt>=10) && p_e26_lhmedium_nod0_mu8noL1) {
                     return true;
                 }
-                else if( (lead_pt>=19 && sub_pt>=16) && p_e17_lhloose_nod0_mu14) {
+                else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
                     return true;
                 }
                 else {
@@ -1552,7 +1552,7 @@ int main(int argc, char* argv[])
                 if( (lead_pt>=26 && sub_pt>=9) && p_e7_lhmedium_nod0_mu24 ) {
                     return true;
                 }
-                else if( (lead_pt>=16 && sub_pt>=19) && p_e17_lhloose_nod0_mu14) {
+                else if( (lead_pt>=20 && sub_pt>=17) && p_e17_lhloose_nod0_mu14) {
                     return true;
                 }
                 else {
