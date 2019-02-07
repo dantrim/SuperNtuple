@@ -13,7 +13,10 @@ set( extra_libs )
 atlas_depends_on_subdirs(
     PUBLIC
     Superflow
+    DileptonTriggerTool
     SusyNtuple
+    hhTruthWeightTools
+    HHLambdaTool
     ${extra_deps}
 )
 
@@ -27,7 +30,9 @@ atlas_add_library( SuperNtupleLib
     SuperNtuple/*.h Root/*.cxx
     PUBLIC_HEADERS SuperNtuple
     PRIVATE_INCLUDE_DIRS ${ROOT_INCLUDE_DIRS} ${LWTNN_INCLUDE_DIRS}
-    LINK_LIBRARIES SuperflowLib SusyNtupleLib ${ROOT_LIBRARIES} ${LWTNN_LIBRARIES}
+    LINK_LIBRARIES SuperflowLib SusyNtupleLib DileptonTriggerToolLib
+        hhTruthWeightToolsLib HHLambdaToolLib 
+        ${ROOT_LIBRARIES} ${LWTNN_LIBRARIES}
 )
 
 # executables
