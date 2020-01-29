@@ -41,12 +41,41 @@
 using namespace std;
 using namespace sflow;
 
-const string analysis_name = "ntupler_muj";
+const string analysis_name = "ntupler_muj_fakes";
 
 //string network_dir = "/data/uclhc/uci/user/dantrim/n0303val/susynt-read/data/";
 string network_dir = "./susynt-read/data/";
 string nn_file = network_dir + "nn_descriptor_nombbmt2_1k.json";
 string nn_file_update = network_dir + "lwtnn_NN_jan15_mt2bb_3x_0p5_250node_adam.json";
+
+bool is_heavy_flavor(int mc_type, int mc_origin)
+{
+    bool heavy_flavor_b =  (mc_type == 3 && (mc_origin == 26 || mc_origin == 29 || mc_origin == 33)) ||
+            (mc_type == 16 && mc_origin == 26) ||
+            ((mc_type == 6 || mc_type == 7) && (mc_origin == 26 || mc_origin == 29 || mc_origin == 33));
+    bool heavy_flavor_c = (mc_type == 3 && (mc_origin == 25 || mc_origin == 32 || mc_origin == 27)) ||
+            (mc_type == 4 && mc_origin == 27) ||
+            (mc_type == 16 && (mc_origin == 25 || mc_origin == 27)) ||
+            (mc_type == 7 && (mc_origin == 25 || mc_origin == 32 || mc_origin == 27)) ||
+            ((mc_type == 6 || mc_type == 8) && mc_origin == 27);
+    return (heavy_flavor_b || heavy_flavor_c);
+}
+
+bool is_conversion(int mc_type, int mc_origin)
+{
+    return ( (mc_type == 14 && mc_origin == 37) ||
+                (mc_type == 4 && (mc_origin == 5 || mc_origin == 7)) ||
+                (mc_type == 16 && mc_origin == 38) );
+}
+
+bool is_prompt_lepton(int mc_type, int mc_origin)
+{
+    // prompt electron
+    bool is_prompt_ele = (mc_type == 2 && (mc_origin == 10 || mc_origin == 12 || mc_origin == 13 || mc_origin == 14 || mc_origin == 43));
+    bool is_prompt_mu  = (mc_type == 6 && (mc_origin == 10 || mc_origin == 12 || mc_origin == 13 || mc_origin == 13 || mc_origin == 15 || mc_origin == 2 || mc_origin == 43));
+    bool is_prompt_lep = (is_prompt_ele || is_prompt_mu);
+    return is_prompt_lep && !(is_heavy_flavor(mc_type, mc_origin) || is_conversion(mc_type, mc_origin));
+}
 
 int main(int argc, char* argv[])
 {
@@ -235,9 +264,9 @@ int main(int argc, char* argv[])
     };
   */
 
-    *cutflow << CutName("opposite sign") << [](Superlink* sl) -> bool {
-        return ((sl->leptons->at(0)->q * sl->leptons->at(1)->q) < 0);
-    };
+//    *cutflow << CutName("opposite sign") << [](Superlink* sl) -> bool {
+//        return ((sl->leptons->at(0)->q * sl->leptons->at(1)->q) < 0);
+//    };
 
   ///*
     *cutflow << CutName("mll > 20 GeV") << [](Superlink* sl) -> bool {
@@ -337,7 +366,7 @@ int main(int argc, char* argv[])
     static bool print_lambdas = true;
     *cutflow << [&](Superlink* sl, var_void*) {
         int dsid = sl->nt->evt()->mcChannel;
-        if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+        if(dsid == 346218)
         {
             hh_truth_mHH = sl->nt->evt()->truth_mhh;
             lambda_weights = lambdaTool.get_weights(hh_truth_mHH);
@@ -358,8 +387,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb truth mHH"); {
         *cutflow << HFTname("truth_mHH");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return hh_truth_mHH;
             }
@@ -374,8 +402,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb NLO reweight"); {
         *cutflow << HFTname("hh_NLO_weight");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return hhWeightTool.getWeight( hh_truth_mHH * 1000. ); // the tool requires values in MeV
             }
@@ -387,8 +414,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-20)"); {
         *cutflow << HFTname("hh_lambda_w_neg20");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-20);
             }
@@ -401,8 +427,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-19)"); {
         *cutflow << HFTname("hh_lambda_w_neg19");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-19);
             }
@@ -415,8 +440,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-18)"); {
         *cutflow << HFTname("hh_lambda_w_neg18");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-18);
             }
@@ -429,8 +453,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-17)"); {
         *cutflow << HFTname("hh_lambda_w_neg17");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-17);
             }
@@ -443,8 +466,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-16)"); {
         *cutflow << HFTname("hh_lambda_w_neg16");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-16);
             }
@@ -457,8 +479,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-15)"); {
         *cutflow << HFTname("hh_lambda_w_neg15");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-15);
             }
@@ -471,8 +492,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-14)"); {
         *cutflow << HFTname("hh_lambda_w_neg14");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-14);
             }
@@ -485,8 +505,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-13)"); {
         *cutflow << HFTname("hh_lambda_w_neg13");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-13);
             }
@@ -499,8 +518,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-12)"); {
         *cutflow << HFTname("hh_lambda_w_neg12");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-12);
             }
@@ -513,8 +531,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-11)"); {
         *cutflow << HFTname("hh_lambda_w_neg11");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-11);
             }
@@ -527,8 +544,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-10)"); {
         *cutflow << HFTname("hh_lambda_w_neg10");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-10);
             }
@@ -541,8 +557,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-9)"); {
         *cutflow << HFTname("hh_lambda_w_neg9");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-9);
             }
@@ -555,8 +570,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-8)"); {
         *cutflow << HFTname("hh_lambda_w_neg8");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-8);
             }
@@ -569,8 +583,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-7)"); {
         *cutflow << HFTname("hh_lambda_w_neg7");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-7);
             }
@@ -583,8 +596,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-6)"); {
         *cutflow << HFTname("hh_lambda_w_neg6");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-6);
             }
@@ -597,8 +609,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-5)"); {
         *cutflow << HFTname("hh_lambda_w_neg5");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-5);
             }
@@ -611,8 +622,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-4)"); {
         *cutflow << HFTname("hh_lambda_w_neg4");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-4);
             }
@@ -625,8 +635,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-3)"); {
         *cutflow << HFTname("hh_lambda_w_neg3");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-3);
             }
@@ -639,8 +648,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-2)"); {
         *cutflow << HFTname("hh_lambda_w_neg2");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-2);
             }
@@ -653,8 +661,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (-1)"); {
         *cutflow << HFTname("hh_lambda_w_neg1");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(-1);
             }
@@ -667,8 +674,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (0)"); {
         *cutflow << HFTname("hh_lambda_w_pos0");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(0);
             }
@@ -681,8 +687,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (1)"); {
         *cutflow << HFTname("hh_lambda_w_pos1");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(1);
             }
@@ -695,8 +700,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (2)"); {
         *cutflow << HFTname("hh_lambda_w_pos2");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(2);
             }
@@ -709,8 +713,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (3)"); {
         *cutflow << HFTname("hh_lambda_w_pos3");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(3);
             }
@@ -723,8 +726,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (4)"); {
         *cutflow << HFTname("hh_lambda_w_pos4");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(4);
             }
@@ -737,8 +739,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (5)"); {
         *cutflow << HFTname("hh_lambda_w_pos5");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(5);
             }
@@ -751,8 +752,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (6)"); {
         *cutflow << HFTname("hh_lambda_w_pos6");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(6);
             }
@@ -765,8 +765,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (7)"); {
         *cutflow << HFTname("hh_lambda_w_pos7");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(7);
             }
@@ -779,8 +778,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (8)"); {
         *cutflow << HFTname("hh_lambda_w_pos8");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(8);
             }
@@ -793,8 +791,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (9)"); {
         *cutflow << HFTname("hh_lambda_w_pos9");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(9);
             }
@@ -807,8 +804,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (10)"); {
         *cutflow << HFTname("hh_lambda_w_pos10");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(10);
             }
@@ -821,8 +817,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (11)"); {
         *cutflow << HFTname("hh_lambda_w_pos11");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(11);
             }
@@ -835,8 +830,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (12)"); {
         *cutflow << HFTname("hh_lambda_w_pos12");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(12);
             }
@@ -849,8 +843,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (13)"); {
         *cutflow << HFTname("hh_lambda_w_pos13");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(13);
             }
@@ -863,8 +856,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (14)"); {
         *cutflow << HFTname("hh_lambda_w_pos14");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(14);
             }
@@ -877,8 +869,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (15)"); {
         *cutflow << HFTname("hh_lambda_w_pos15");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(15);
             }
@@ -891,8 +882,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (16)"); {
         *cutflow << HFTname("hh_lambda_w_pos16");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(16);
             }
@@ -905,8 +895,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (17)"); {
         *cutflow << HFTname("hh_lambda_w_pos17");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(17);
             }
@@ -919,8 +908,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (18)"); {
         *cutflow << HFTname("hh_lambda_w_pos18");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(18);
             }
@@ -933,8 +921,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (19)"); {
         *cutflow << HFTname("hh_lambda_w_pos19");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(19);
             }
@@ -947,8 +934,7 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("WWbb lambda weight (20)"); {
         *cutflow << HFTname("hh_lambda_w_pos20");
         *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
+            if(sl->nt->evt()->mcChannel == 346218)
             {
                 return lambda_weights.at(20);
             }
@@ -957,77 +943,7 @@ int main(int argc, char* argv[])
         *cutflow << SaveVar();
     }
 
-    *cutflow << NewVar("HH bbll type"); {
-        *cutflow << HFTname("hh_bbll_type");
-        *cutflow << [&](Superlink* sl, var_int*) -> int {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
-            {
-                if(dsid == 346218)
-                {
-                    return 0;
-                }
-                else if(dsid == 450030)
-                {
-                    return 1;
-                }
-                else if(dsid == 450572)
-                {
-                    return 2;
-                }
-            }
-            return -1;
-        };
-        *cutflow << SaveVar();
-    }
 
-    *cutflow << NewVar("HH denominator factor"); {
-        *cutflow << HFTname("hh_denominator");
-        *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
-            {
-                if(dsid == 346218)
-                {
-                    return 0.016611;
-                }
-                else if(dsid == 450030)
-                {
-                    return 0.00539;
-                }
-                else if(dsid == 450572)
-                {
-                    return 0.000424;
-                }
-            }
-            return 1.0;
-        };
-        *cutflow << SaveVar();
-    }
-
-    *cutflow << NewVar("Inverse of HH denominator factor"); {
-        *cutflow << HFTname("hh_denominator_inv");
-        *cutflow << [&](Superlink* sl, var_float*) -> double {
-            int dsid = sl->nt->evt()->mcChannel;
-            if(dsid == 346218 || dsid == 450030 || dsid == 450572)
-            {
-                if(dsid == 346218)
-                {
-                    return (1.0 / 0.016611);
-                }
-                else if(dsid == 450030)
-                {
-                    return (1.0 / 0.00539);
-                }
-                else if(dsid == 450572)
-                {
-                    return (1.0 / 0.000424);
-                }
-            }
-            return 1.0;
-        };
-        *cutflow << SaveVar();
-    }
 
     bool p_mu20_iloose_L1MU15;
     bool p_mu20_ivarloose_L1MU15;
@@ -2091,6 +2007,177 @@ int main(int argc, char* argv[])
         };
         *cutflow << SaveVar();
     }
+
+    *cutflow << NewVar("l0_mcType"); {
+        *cutflow << HFTname("l0_mcType");
+        *cutflow << [&](Superlink* sl, var_int*) -> int {
+            return sl->leptons->at(0)->mcType;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("l1_mcType"); {
+        *cutflow << HFTname("l1_mcType");
+        *cutflow << [&](Superlink* sl, var_int*) -> int {
+            return sl->leptons->at(1)->mcType;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("l0_mcOrigin"); {
+        *cutflow << HFTname("l0_mcOrigin");
+        *cutflow << [&](Superlink* sl, var_int*) -> int {
+            return sl->leptons->at(0)->mcOrigin;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("l1_mcOrigin"); {
+        *cutflow << HFTname("l1_mcOrigin");
+        *cutflow << [&](Superlink* sl, var_int*) -> int {
+            return sl->leptons->at(1)->mcOrigin;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("isSS"); {
+        *cutflow << HFTname("isSS");
+        *cutflow << [&](Superlink* sl, var_int*) -> int {
+            bool is_os = (sl->leptons->at(0)->q * sl->leptons->at(1)->q < 0);
+            return !is_os;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("isOS"); {
+        *cutflow << HFTname("isOS");
+        *cutflow << [&](Superlink* sl, var_int*) -> int {
+            bool is_os = (sl->leptons->at(0)->q * sl->leptons->at(1)->q < 0);
+            return is_os;
+        };
+        *cutflow << SaveVar();
+    }
+
+    bool is_prompt_event;
+    bool is_conversion_event;
+    bool is_heavy_flavor_event;
+    int lead_is_fake;
+    int sublead_is_fake;
+
+    *cutflow << NewVar("num_prompt_lepton"); {
+        *cutflow << HFTname("num_prompt_lepton");
+        *cutflow << [&](Superlink* sl, var_int*) -> int {
+            int n_true_lep = 0;
+            is_prompt_event = false;
+            is_conversion_event = false;
+            is_heavy_flavor_event = false;
+            lead_is_fake = -1;
+            sublead_is_fake = -1;
+            for(auto & lep : *sl->leptons)
+            {
+                int mc_type = lep->mcType;
+                int mc_orig = lep->mcOrigin;
+                if(is_prompt_lepton(mc_type, mc_orig)) n_true_lep++;
+            }
+            if(n_true_lep == 2)
+            {
+                is_prompt_event = true;
+                is_conversion_event = false;
+                is_heavy_flavor_event = false;
+            }
+            else if(n_true_lep < 2)
+            {
+                is_prompt_event = false;
+                int lep_idx = 0;
+                for(auto & lep : *sl->leptons)
+                {
+                    int mc_type = lep->mcType;
+                    int mc_orig = lep->mcOrigin;
+                    if(!is_prompt_lepton(mc_type, mc_orig))
+                    {
+                        if(lep_idx == 0)
+                        {
+                            lead_is_fake = 1;
+                            sublead_is_fake = 0;
+                        }
+                        else if(lep_idx == 1)
+                        {
+                            lead_is_fake = 0;
+                            sublead_is_fake = 1;
+                        }
+                        if(is_conversion(mc_type, mc_orig))
+                        {
+                            is_conversion_event = true;
+                            is_heavy_flavor_event = false;
+                        }
+                        else if(is_heavy_flavor(mc_type, mc_orig))
+                        {
+                            is_conversion_event = false;
+                            is_heavy_flavor_event = true;
+                        }
+                        break;
+                    }
+                    lep_idx++;
+                }
+            }
+            return n_true_lep;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("lead_is_fake"); {
+        *cutflow << HFTname("lead_is_fake");
+        *cutflow << [&](Superlink* /*sl*/, var_int*) -> int {
+            if(is_prompt_event)
+            {
+                return 0;
+            }
+            else
+            {
+                return lead_is_fake;
+            }
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("sublead_is_fake"); {
+        *cutflow << HFTname("sublead_is_fake");
+        *cutflow << [&](Superlink* /*sl*/, var_int*) -> int {
+            if(is_prompt_event)
+            {
+                return 0;
+            }
+            else
+            {
+                return sublead_is_fake;
+            }
+        };
+        *cutflow << SaveVar();
+    }
+
+    *cutflow << NewVar("is_prompt"); {
+        *cutflow << HFTname("is_prompt");
+        *cutflow << [&](Superlink* /*sl*/, var_int*) -> int {
+            return is_prompt_event;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("is_NP_heavy_flavor"); {
+        *cutflow << HFTname("is_NP_heavy_flavor");
+        *cutflow << [&](Superlink* /*sl*/, var_int*) -> int {
+            return is_heavy_flavor_event;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("is_NP_conversion"); {
+        *cutflow << HFTname("is_NP_conversion");
+        *cutflow << [&](Superlink* /*sl*/, var_int*) -> int {
+            return is_conversion_event;
+        };
+        *cutflow << SaveVar();
+    }
+    *cutflow << NewVar("is_NP_other"); {
+        *cutflow << HFTname("is_NP_other");
+        *cutflow << [&](Superlink* /*sl*/, var_int*) -> int {
+            return !(is_prompt_event || is_conversion_event || is_heavy_flavor_event);
+        };
+        *cutflow << SaveVar();
+    }
+
+
 
     *cutflow << NewVar("num_true_lep"); {
         *cutflow << HFTname("num_true_lep");

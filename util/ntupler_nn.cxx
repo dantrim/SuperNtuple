@@ -128,11 +128,11 @@ int main(int argc, char* argv[])
 
     // trigger tool
     dileptrig::DileptonTriggerTool* dilep_trig_tool1516 = new dileptrig::DileptonTriggerTool();
-    dilep_trig_tool1516->initialize("WWBB1516", &cutflow->nttools().triggerTool());
+    dilep_trig_tool1516->initialize("WWBB1516", &cutflow->nttools().triggerTool(), &cutflow->nttools());
     dileptrig::DileptonTriggerTool* dilep_trig_tool151617 = new dileptrig::DileptonTriggerTool();
-    dilep_trig_tool151617->initialize("WWBB151617RAND", &cutflow->nttools().triggerTool());
+    dilep_trig_tool151617->initialize("WWBB151617RAND", &cutflow->nttools().triggerTool(), &cutflow->nttools());
     dileptrig::DileptonTriggerTool* dilep_trig_tool15161718 = new dileptrig::DileptonTriggerTool();
-    dilep_trig_tool15161718->initialize("WWBB15161718RAND", &cutflow->nttools().triggerTool());
+    dilep_trig_tool15161718->initialize("WWBB15161718RAND", &cutflow->nttools().triggerTool(), &cutflow->nttools());
 
     // print some useful
     cout << analysis_name << "    Total Entries    : " << chain->GetEntries() << endl;
@@ -457,24 +457,27 @@ int main(int argc, char* argv[])
     *cutflow << NewVar("pass_wwbb_trig_1516"); {
         *cutflow << HFTname("wwbb_trig_1516");
         *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+            float sf = 1.0;
             return dilep_trig_tool1516->pass_trigger_selection(sl->nt->evt(),
-                    sl->leptons->at(0), sl->leptons->at(1), false);
+                    sl->leptons->at(0), sl->leptons->at(1), sf, false);
         };
         *cutflow << SaveVar();
     }
     *cutflow << NewVar("pass_wwbb_trig_151617"); {
         *cutflow << HFTname("wwbb_trig_151617Rand");
         *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+            float sf = 1.0;
             return dilep_trig_tool151617->pass_trigger_selection(sl->nt->evt(),
-                    sl->leptons->at(0), sl->leptons->at(1), false);
+                    sl->leptons->at(0), sl->leptons->at(1), sf, false);
         };
         *cutflow << SaveVar();
     }
     *cutflow << NewVar("pass_wwbb_trig_151617"); {
         *cutflow << HFTname("wwbb_trig_15161718Rand");
         *cutflow << [&](Superlink* sl, var_bool*) -> bool {
+            float sf = 1.0;
             return dilep_trig_tool15161718->pass_trigger_selection(sl->nt->evt(),
-                    sl->leptons->at(0), sl->leptons->at(1), false);
+                    sl->leptons->at(0), sl->leptons->at(1), sf, false);
         };
         *cutflow << SaveVar();
     }
